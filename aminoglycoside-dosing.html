@@ -84,6 +84,58 @@
   .interp-flag.watch { background: #FEF6E7; color: #B45309; }
   .interp-flag.stop { background: #FEF2F2; color: #B91C1C; }
   .interp-flag.ok { background: #ECFDF9; color: #0F766E; }
+
+  .clinical-q {
+    border-left: 3px solid var(--accent);
+    background: #FAF8FF;
+    border-radius: 0 12px 12px 0;
+    padding: 16px 20px;
+    margin: 24px 0 0;
+  }
+  .clinical-q .tag {
+    font-size: 11px; font-weight: 700; letter-spacing: 0.1em; text-transform: uppercase;
+    color: var(--accent); margin-bottom: 6px;
+  }
+  .clinical-q p { font-size: 14.5px; line-height: 1.6; margin: 0; color: var(--ink); }
+
+  .next-dose {
+    background: var(--card); border: 1px solid var(--border); border-left: 4px solid var(--accent);
+    border-radius: 12px; padding: 20px 24px; margin-top: 24px;
+  }
+  .next-dose .tag {
+    font-size: 11px; font-weight: 700; letter-spacing: 0.1em; text-transform: uppercase;
+    color: var(--accent); margin-bottom: 10px;
+  }
+  .next-dose .headline { font-family: 'Newsreader', serif; font-size: 20px; font-weight: 600; color: var(--ink); margin: 0 0 6px; }
+  .next-dose .sub { font-size: 13px; color: var(--muted); line-height: 1.6; margin: 0 0 14px; }
+  .next-dose .nd-grid { display: grid; grid-template-columns: repeat(auto-fit, minmax(140px, 1fr)); gap: 14px; margin-bottom: 12px; }
+  .next-dose .nd-stat .k { font-size: 11px; text-transform: uppercase; letter-spacing: 0.04em; color: var(--muted); margin-bottom: 3px; }
+  .next-dose .nd-stat .v { font-family: 'IBM Plex Mono', monospace; font-size: 16px; color: var(--ink); }
+  .next-dose .nd-note { font-size: 12.5px; color: var(--muted); line-height: 1.6; border-top: 1px solid var(--border); padding-top: 12px; }
+
+  .content-section { margin-top: 40px; }
+  .content-section .tag {
+    font-size: 11px; font-weight: 700; letter-spacing: 0.1em; text-transform: uppercase;
+    color: var(--accent); margin-bottom: 14px;
+  }
+
+  .teaching-points { display: flex; flex-direction: column; gap: 12px; }
+  .tp-card {
+    background: var(--card); border: 1px solid var(--border); border-radius: 12px;
+    padding: 16px 18px;
+  }
+  .tp-card .tp-title { font-family: 'Newsreader', serif; font-size: 16.5px; font-weight: 600; margin: 0 0 6px; color: var(--ink); }
+  .tp-card p { font-size: 13.5px; line-height: 1.6; color: var(--muted); margin: 0; }
+
+  .pearl {
+    background: #F0F9F7; border: 1px solid #CDE8E2; border-radius: 12px;
+    padding: 16px 20px; margin-top: 32px;
+  }
+  .pearl .tag {
+    font-size: 11px; font-weight: 700; letter-spacing: 0.1em; text-transform: uppercase;
+    color: #0F766E; margin-bottom: 6px;
+  }
+  .pearl p { font-size: 14.5px; line-height: 1.6; margin: 0; color: var(--ink); }
 </style>
 </head>
 <body>
@@ -91,7 +143,7 @@
   <a class="brand" href="index.html">Clinical Pharmacokinetics Learning Lab</a>
   <div class="links">
     <a href="index.html">Home</a>
-    <a href="bayesian-dosing.html">Bayesian Dosing</a>
+    <a href="bayesian-dosing.html">Vancomycin</a>
     <a href="about.html">About</a>
     <a href="references.html">References</a>
     <a href="disclaimer.html">Disclaimer</a>
@@ -100,7 +152,12 @@
 <div class="wrap">
   <div class="eyebrow">Extended-Interval Aminoglycoside Dosing</div>
   <h1>Gentamicin / Tobramycin Interval Calculator</h1>
-  <p class="subtitle">Recommends a starting interval from creatinine clearance, then classifies a single random level (drawn 6–14h post-infusion) against boundary curves derived from one-compartment PK — reconstructing the logic behind Hartford-nomogram-style extended-interval dosing.</p>
+  <p class="subtitle">This tool calculates a high-dose starting regimen for gentamicin or tobramycin (7 mg/kg) and evaluates a single mid-cycle drug level to determine the safest dosing interval (Q24h, Q36h, or Q48h) using Hartford nomogram principles.</p>
+
+  <div class="clinical-q">
+    <div class="tag">Clinical question</div>
+    <p>How do we optimize peak bactericidal efficacy while ensuring drug clearance allows for a sufficiently low trough to prevent nephrotoxicity and ototoxicity?</p>
+  </div>
 
   <div class="grid">
     <div class="card">
@@ -172,6 +229,31 @@
       </div>
     </div>
   </div>
+
+  <div class="next-dose" id="nextDose"></div>
+
+  <div class="content-section">
+    <div class="tag">Teaching points</div>
+    <div class="teaching-points">
+      <div class="tp-card">
+        <p class="tp-title">1. High-Dose Extended-Interval Rationale</p>
+        <p>Aminoglycosides display concentration-dependent killing (optimizing Peak/MIC ratio) and a post-antibiotic effect (PAE). Administering a large single dose (7 mg/kg) maximizes bacterial clearance while long dosing intervals allow concentrations to drop below toxic thresholds.</p>
+      </div>
+      <div class="tp-card">
+        <p class="tp-title">2. Single Random Level Concept</p>
+        <p>Instead of drawing classical steady-state peak and trough pairs, the Hartford nomogram relies on a single serum concentration drawn 6 to 14 hours post-infusion. This measurement reflects the patient's individual elimination rate constant (K<sub>e</sub>) and maps directly to an appropriate interval.</p>
+      </div>
+      <div class="tp-card">
+        <p class="tp-title">3. Mathematical Derivation vs. Digitized Nomograms</p>
+        <p>Traditional nomograms use static paper charts. This tool mathematically reconstructs the underlying boundary lines by back-calculating the exact elimination rate constant (K<sub>e</sub>) required to reach a safe trough (&lt; 2 mg/L) at 24, 36, or 48 hours for a 7 mg/kg dose.</p>
+      </div>
+    </div>
+  </div>
+
+  <div class="pearl">
+    <div class="tag">Clinical pearls & limitations</div>
+    <p>Extended-interval dosing is intended for patients with stable renal function. Avoid using this nomogram approach in pregnancy, severe ascites, major burns (&gt;20% BSA), end-stage renal disease/dialysis, or when treating endocarditis where synergy dosing (3 mg/kg/day split Q8h) is indicated.</p>
+  </div>
 </div>
 
 <script>
@@ -190,7 +272,6 @@ function solveBoundaryKe(tauTarget, targetTrough, dose, vd, tinf) {
   for (let i = 0; i < 80; i++) {
     const mid = (lo + hi) / 2;
     const c = concSingleDose(tauTarget, mid, dose, vd, tinf);
-    // higher ke -> lower concentration at tauTarget
     if (c > targetTrough) lo = mid; else hi = mid;
   }
   return (lo + hi) / 2;
@@ -268,25 +349,60 @@ function render() {
   document.getElementById('interpBody').innerHTML = buildInterpretation({
     crcl, startInterval, zone, zoneLabel, levelTime, levelConc, drug: document.getElementById('drug').value,
   });
+
+  renderNextDose({
+    dose, zone, zoneLabel, levelTime, levelConc, crcl, startInterval, drug: document.getElementById('drug').value
+  });
+}
+
+function renderNextDose(p) {
+  const drugName = p.drug.charAt(0).toUpperCase() + p.drug.slice(1);
+  let headline = '';
+  let sub = '';
+
+  if (p.zone === 'q24') {
+    headline = `Administer ${p.dose.toFixed(0)} mg every 24 hours`;
+    sub = `The random level of ${p.levelConc.toFixed(1)} mg/L drawn at ${p.levelTime.toFixed(1)}h falls within the Q24h zone, indicating adequate clearance for a 24-hour dosing interval.`;
+  } else if (p.zone === 'q36') {
+    headline = `Administer ${p.dose.toFixed(0)} mg every 36 hours`;
+    sub = `The random level of ${p.levelConc.toFixed(1)} mg/L drawn at ${p.levelTime.toFixed(1)}h falls within the Q36h zone, requiring an extended interval to ensure concentration drops below toxicity thresholds.`;
+  } else if (p.zone === 'q48') {
+    headline = `Administer ${p.dose.toFixed(0)} mg every 48 hours`;
+    sub = `The random level of ${p.levelConc.toFixed(1)} mg/L drawn at ${p.levelTime.toFixed(1)}h falls within the Q48h zone due to reduced clearance.`;
+  } else {
+    headline = `Hold Next Dose & Individualize`;
+    sub = `The measured level exceeds the 48-hour boundary. ${drugName} clearance is significantly delayed.`;
+  }
+
+  document.getElementById('nextDose').innerHTML = `
+    <div class="tag">What happens next</div>
+    <p class="headline">${headline}</p>
+    <p class="sub">${sub}</p>
+    <div class="nd-grid">
+      <div class="nd-stat"><div class="k">Dose</div><div class="v">${p.dose.toFixed(0)} mg</div></div>
+      <div class="nd-stat"><div class="k">Recommended Interval</div><div class="v">${p.zone === 'above' ? 'Hold' : p.zone.toUpperCase()}</div></div>
+      <div class="nd-stat"><div class="k">Sampling Time</div><div class="v">${p.levelTime.toFixed(1)} hr post-start</div></div>
+      <div class="nd-stat"><div class="k">Nomogram Zone</div><div class="v">${p.zoneLabel}</div></div>
+    </div>
+    <p class="nd-note">${p.zone === 'above' 
+      ? `Recheck a serum level in 24 hours. Do not administer further doses until concentration drops below 2 mg/L.` 
+      : `Recheck a random level with subsequent doses if renal function fluctuates or if therapy extends beyond 48–72 hours.`}</p>
+  `;
 }
 
 function buildInterpretation(p) {
   const drugName = p.drug.charAt(0).toUpperCase() + p.drug.slice(1);
   const parts = [];
 
-  // Renal function
-  let renalNote;
   if (p.crcl >= 60) renalNote = `Renal function is preserved (CrCl ${p.crcl.toFixed(0)} mL/min), consistent with a starting interval of ${p.startInterval}.`;
   else if (p.crcl >= 20) renalNote = `Renal function is reduced (CrCl ${p.crcl.toFixed(0)} mL/min), which is why the starting interval widens to ${p.startInterval} — clearance is slower, so more time is needed to reach a safe trough.`;
   else renalNote = `<span class="interp-flag stop">Flag</span>CrCl is ${p.crcl.toFixed(0)} mL/min — below the range extended-interval dosing was validated for. Traditional multiple-daily dosing with individualized PK (not this nomogram-style approach) is the appropriate method here.`;
   parts.push(`<p>${renalNote}</p>`);
 
-  // Sample timing validity
   if (p.levelTime < 6 || p.levelTime > 14) {
     parts.push(`<p><span class="interp-flag watch">Watch</span>The level was drawn at ${p.levelTime.toFixed(1)}h, outside the validated 6–14h sampling window. Interval classification from a level outside this window is unreliable — redraw within 6–14h post-infusion before acting on the result.</p>`);
   }
 
-  // Zone vs. starting interval reconciliation
   const zoneOrder = { q24: 0, q36: 1, q48: 2, above: 3 };
   const startOrder = { 'q24h': 0, 'q36h': 1, 'q48h': 2, 'Not recommended (individualize)': 3 };
   const zRank = zoneOrder[p.zone];
