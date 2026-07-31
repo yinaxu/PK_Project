@@ -1,0 +1,384 @@
+<!doctype html>
+<html lang="en">
+<head>
+<meta charset="UTF-8" />
+<meta name="viewport" content="width=device-width, initial-scale=1.0" />
+<title>Extended-Interval Aminoglycoside Explorer — Clinical Pharmacokinetics Learning Lab</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link href="https://fonts.googleapis.com/css2?family=Newsreader:wght@500;600&family=Inter:wght@400;500;600;700&family=IBM+Plex+Mono:wght@400;500&display=swap" rel="stylesheet">
+<style>
+  :root {
+    --ink: #14213D;
+    --muted: #8891A0;
+    --muted-light: #B0B7C3;
+    --border: #EAEDF1;
+    --input-border: #DDE2EA;
+    --accent: #6D28D9;
+    --q24: #0F766E;
+    --q36: #B45309;
+    --q48: #B91C1C;
+    --bg: #FAFBFC;
+    --card: #FFFFFF;
+  }
+  * { box-sizing: border-box; }
+  body { margin: 0; background: var(--bg); color: var(--ink); font-family: 'Inter', sans-serif; }
+  .nav { display: flex; justify-content: space-between; align-items: center; flex-wrap: wrap; gap: 12px; padding: 20px 32px; border-bottom: 1px solid var(--border); background: #fff; }
+  .nav .brand { font-family: 'Newsreader', serif; font-weight: 600; font-size: 16px; color: var(--ink); text-decoration: none; }
+  .nav .links { display: flex; gap: 22px; }
+  .nav .links a { font-size: 13px; color: var(--muted); text-decoration: none; font-weight: 500; }
+  .nav .links a:hover { color: var(--ink); }
+  .page-body { padding: 32px 20px 80px; }
+  .wrap { max-width: 980px; margin: 0 auto; }
+  .question-card { background: #FAF8FF; border: 1px solid #E3D9F8; border-radius: 14px; padding: 18px 22px; margin-top: 22px; }
+  .question-card .q-label { font-size: 11px; font-weight: 700; text-transform: uppercase; letter-spacing: 0.06em; color: var(--accent); margin-bottom: 6px; }
+  .question-card .q-text { font-family: 'Newsreader', serif; font-size: 18px; font-weight: 600; color: var(--ink); }
+  .teaching { margin-top: 40px; }
+  .teaching h2 { font-family: 'Newsreader', serif; font-size: 22px; font-weight: 600; margin-bottom: 16px; }
+  .teaching-points { display: flex; flex-direction: column; gap: 12px; }
+  .tp { background: var(--card); border: 1px solid var(--border); border-radius: 12px; padding: 16px 18px; display: flex; gap: 14px; }
+  .tp .n { font-family: 'IBM Plex Mono', monospace; font-size: 13px; color: var(--accent); font-weight: 700; flex-shrink: 0; }
+  .tp p { font-size: 13.5px; line-height: 1.6; color: var(--ink); margin: 0; }
+  .refs { margin-top: 24px; font-size: 12.5px; color: var(--muted); line-height: 1.7; }
+  .refs a { color: var(--accent); }
+  .eyebrow { font-size: 11px; font-weight: 700; letter-spacing: 0.12em; color: var(--accent); text-transform: uppercase; margin-bottom: 6px; }
+  h1 { font-family: 'Newsreader', serif; font-size: 34px; font-weight: 600; margin: 0; letter-spacing: -0.01em; }
+  .subtitle { font-size: 13.5px; color: var(--muted); margin-top: 8px; max-width: 620px; line-height: 1.5; }
+  .grid { display: grid; grid-template-columns: minmax(260px, 320px) 1fr; gap: 24px; margin-top: 28px; }
+  @media (max-width: 760px) { .grid { grid-template-columns: 1fr; } }
+  .card { background: var(--card); border: 1px solid var(--border); border-radius: 14px; padding: 22px; }
+  .section-label { font-size: 12px; font-weight: 700; color: var(--ink); margin-bottom: 16px; letter-spacing: 0.02em; }
+  .field-grid { display: grid; grid-template-columns: 1fr 1fr; gap: 14px; margin-bottom: 20px; }
+  label.field { display: flex; flex-direction: column; gap: 6px; font-size: 12.5px; }
+  label.field span.field-label { letter-spacing: 0.02em; text-transform: uppercase; font-size: 11px; font-weight: 600; color: var(--muted); }
+  .input-row { display: flex; align-items: baseline; gap: 6px; }
+  input[type=number], select {
+    width: 100%; font-family: 'IBM Plex Mono', monospace; font-size: 15px; color: var(--ink);
+    background: #fff; border: 1px solid var(--input-border); border-radius: 8px; padding: 9px 10px; outline: none;
+  }
+  input[type=number]:focus, select:focus { border-color: var(--accent); }
+  .unit { font-size: 12px; color: var(--muted); min-width: 30px; }
+  .derived { border-top: 1px solid var(--border); padding-top: 16px; display: flex; flex-direction: column; gap: 9px; }
+  .derived-row { display: flex; justify-content: space-between; font-size: 12.5px; }
+  .derived-row .k { color: var(--muted); }
+  .derived-row .v { font-family: 'IBM Plex Mono', monospace; color: var(--ink); }
+
+  .stats-row { display: grid; grid-template-columns: repeat(2, 1fr); gap: 12px; }
+  .stat { background: var(--card); border: 1px solid var(--border); border-radius: 14px; padding: 16px 18px; }
+  .stat .label { font-size: 11px; color: var(--muted); text-transform: uppercase; letter-spacing: 0.06em; margin-bottom: 6px; }
+  .stat .value { font-family: 'IBM Plex Mono', monospace; font-size: 22px; color: var(--ink); }
+  .stat .value .unit-sm { font-size: 13px; color: var(--muted); }
+
+  .zone-banner {
+    border-radius: 14px; padding: 18px 22px; margin-top: 12px; border: 1px solid;
+  }
+  .zone-label { font-size: 11px; font-weight: 700; letter-spacing: 0.08em; text-transform: uppercase; margin-bottom: 4px; }
+  .zone-value { font-family: 'Newsreader', serif; font-size: 26px; font-weight: 600; color: var(--ink); }
+  .zone-sub { font-size: 12.5px; color: var(--muted); margin-top: 4px; }
+
+  .chart-card { background: var(--card); border: 1px solid var(--border); border-radius: 14px; padding: 20px; margin-top: 16px; }
+  .legend { display: flex; gap: 16px; margin-top: 10px; font-size: 11.5px; color: var(--muted); flex-wrap: wrap; }
+  .legend-item { display: flex; align-items: center; gap: 6px; }
+  .swatch { width: 16px; height: 2px; display: inline-block; }
+  .swatch.dot { width: 8px; height: 8px; border-radius: 50%; }
+  .disclaimer { font-size: 11.5px; color: var(--muted-light); line-height: 1.5; margin: 14px 4px 0; }
+
+  .interp-card { background: #FAF8FF; border: 1px solid #E3D9F8; border-radius: 14px; padding: 20px 22px; margin-top: 16px; }
+  .interp-body p { font-size: 13px; line-height: 1.65; color: var(--ink); margin: 0 0 10px; }
+  .interp-body p:last-child { margin-bottom: 0; }
+  .interp-body ul { margin: 0 0 10px; padding-left: 18px; }
+  .interp-body li { font-size: 13px; line-height: 1.6; color: var(--ink); margin-bottom: 4px; }
+  .interp-flag { display: inline-block; font-size: 10.5px; font-weight: 700; text-transform: uppercase; letter-spacing: 0.05em; padding: 2px 8px; border-radius: 5px; margin-right: 6px; }
+  .interp-flag.watch { background: #FEF6E7; color: #B45309; }
+  .interp-flag.stop { background: #FEF2F2; color: #B91C1C; }
+  .interp-flag.ok { background: #ECFDF9; color: #0F766E; }
+</style>
+</head>
+<body>
+  <nav class="nav">
+    <a href="index.html" class="brand">Clinical Pharmacokinetics Learning Lab</a>
+    <div class="links">
+      <a href="vancomycin-explorer.html">Vancomycin</a>
+      <a href="aminoglycoside-explorer.html">Aminoglycoside</a>
+      <a href="case-explorer.html">Case Explorer</a>
+      <a href="about.html">About</a>
+      <a href="references.html">References</a>
+      <a href="disclaimer.html">Disclaimer</a>
+    </div>
+  </nav>
+
+<div class="page-body">
+<div class="wrap">
+  <div class="eyebrow">Extended-Interval Aminoglycoside Dosing</div>
+  <h1>Extended-Interval Aminoglycoside Explorer</h1>
+  <p class="subtitle">Recommends a starting interval from creatinine clearance, then classifies a single random level (drawn 6–14h post-infusion) against boundary curves derived from one-compartment PK — reconstructing the logic behind Hartford-nomogram-style extended-interval dosing.</p>
+
+  <div class="question-card">
+    <div class="q-label">Clinical question</div>
+    <div class="q-text">A random gentamicin level came back mid-interval. Does this patient's current dosing interval still hold, or does the level say otherwise?</div>
+  </div>
+
+  <div class="grid">
+    <div class="card">
+      <div class="section-label">PATIENT</div>
+      <div class="field-grid">
+        <label class="field"><span class="field-label">Age</span>
+          <div class="input-row"><input type="number" id="age" value="58" step="1" /><span class="unit">yr</span></div>
+        </label>
+        <label class="field"><span class="field-label">Sex</span>
+          <select id="sex"><option value="male">Male</option><option value="female">Female</option></select>
+        </label>
+        <label class="field"><span class="field-label">Weight</span>
+          <div class="input-row"><input type="number" id="weight" value="72" step="1" /><span class="unit">kg</span></div>
+        </label>
+        <label class="field"><span class="field-label">SCr</span>
+          <div class="input-row"><input type="number" id="scr" value="0.9" step="0.1" /><span class="unit">mg/dL</span></div>
+        </label>
+      </div>
+
+      <div class="section-label">REGIMEN</div>
+      <div class="field-grid">
+        <label class="field"><span class="field-label">Drug</span>
+          <select id="drug"><option value="gentamicin">Gentamicin</option><option value="tobramycin">Tobramycin</option></select>
+        </label>
+        <label class="field"><span class="field-label">Dose/kg</span>
+          <div class="input-row"><input type="number" id="mgkg" value="7" step="0.5" /><span class="unit">mg/kg</span></div>
+        </label>
+        <label class="field"><span class="field-label">Infusion</span>
+          <div class="input-row"><input type="number" id="tinf" value="1" step="0.25" /><span class="unit">hr</span></div>
+        </label>
+      </div>
+
+      <div class="section-label" style="color:#B45309;">● RANDOM LEVEL</div>
+      <div class="field-grid" style="margin-bottom: 0;">
+        <label class="field"><span class="field-label">Drawn at</span>
+          <div class="input-row"><input type="number" id="levelTime" value="9" step="0.5" /><span class="unit">hr</span></div>
+        </label>
+        <label class="field"><span class="field-label">Level</span>
+          <div class="input-row"><input type="number" id="levelConc" value="4.5" step="0.1" /><span class="unit">mg/L</span></div>
+        </label>
+      </div>
+
+      <div class="derived" id="derived" style="margin-top:20px;"></div>
+    </div>
+
+    <div>
+      <div class="stats-row">
+        <div class="stat"><div class="label">Total dose</div><div class="value" id="doseOut">–</div></div>
+        <div class="stat"><div class="label">CrCl-based starting interval</div><div class="value" id="intervalOut">–</div></div>
+      </div>
+
+      <div class="zone-banner" id="zoneBanner"></div>
+
+      <div class="chart-card">
+        <div class="section-label">RANDOM LEVEL VS. INTERVAL BOUNDARY CURVES</div>
+        <svg id="chart" width="100%" height="280" viewBox="0 0 640 280"></svg>
+        <div class="legend">
+          <div class="legend-item"><span class="swatch" style="background:#0F766E;"></span>q24h boundary</div>
+          <div class="legend-item"><span class="swatch" style="background:#B45309;"></span>q36h boundary</div>
+          <div class="legend-item"><span class="swatch" style="background:#B91C1C;"></span>q48h boundary</div>
+          <div class="legend-item"><span class="swatch dot" style="background:#6D28D9;"></span>Patient's level</div>
+        </div>
+      </div>
+      <p class="disclaimer">Boundary curves are derived, not digitized from the published Hartford nomogram: for each interval (24/36/48h) the elimination rate is solved so the predicted trough equals a 2 mg/L target at that interval, assuming Vd = 0.26 L/kg and single-dose (non-steady-state) one-compartment kinetics — the same construction logic the original nomogram used. Built for illustration and learning; use a validated institutional nomogram or PK software for actual patient dosing.</p>
+
+      <div class="interp-card">
+        <div class="section-label" style="color:#6D28D9;">CLINICAL INTERPRETATION</div>
+        <div id="interpBody"></div>
+      </div>
+    </div>
+  </div>
+
+  <div class="teaching">
+    <h2>Teaching points</h2>
+    <div class="teaching-points">
+      <div class="tp"><div class="n">01</div><p>Extended-interval dosing exploits aminoglycosides' concentration-dependent killing and post-antibiotic effect — a high peak drives bacterial kill, and the drug keeps suppressing regrowth even after concentrations fall, so a long drug-free interval doesn't mean lost efficacy.</p></div>
+      <div class="tp"><div class="n">02</div><p>The same drug-free interval that supports efficacy also protects against nephrotoxicity, since aminoglycoside uptake into renal tubular cells is saturable — a sustained trough (rather than a high peak) is what drives toxicity risk.</p></div>
+      <div class="tp"><div class="n">03</div><p>A random level only classifies reliably within the validated 6–14h sampling window — outside that window, the boundary curves aren't meaningful and the level should be redrawn.</p></div>
+      <div class="tp"><div class="n">04</div><p>Extended-interval dosing assumes stable renal function. A rising creatinine between doses is itself clinically informative, independent of any single level.</p></div>
+    </div>
+
+    <div class="refs">
+      See the full <a href="references.html">references page</a> for the original Hartford nomogram study and the creatinine clearance equation used here.
+    </div>
+  </div>
+</div>
+</div>
+
+<script>
+const ids = ['age','sex','weight','scr','drug','mgkg','tinf','levelTime','levelConc'];
+ids.forEach(id => document.getElementById(id).addEventListener('input', render));
+
+function concSingleDose(t, ke, dose, vd, tinf) {
+  const cl = ke * vd;
+  if (t <= tinf) return (dose / (cl * tinf)) * (1 - Math.exp(-ke * t));
+  const cmax = (dose / (cl * tinf)) * (1 - Math.exp(-ke * tinf));
+  return cmax * Math.exp(-ke * (t - tinf));
+}
+
+function solveBoundaryKe(tauTarget, targetTrough, dose, vd, tinf) {
+  let lo = 0.005, hi = 0.6;
+  for (let i = 0; i < 80; i++) {
+    const mid = (lo + hi) / 2;
+    const c = concSingleDose(tauTarget, mid, dose, vd, tinf);
+    // higher ke -> lower concentration at tauTarget
+    if (c > targetTrough) lo = mid; else hi = mid;
+  }
+  return (lo + hi) / 2;
+}
+
+function render() {
+  const age = parseFloat(document.getElementById('age').value) || 0;
+  const sex = document.getElementById('sex').value;
+  const weight = parseFloat(document.getElementById('weight').value) || 0;
+  const scr = parseFloat(document.getElementById('scr').value) || 0.1;
+  const mgkg = parseFloat(document.getElementById('mgkg').value) || 7;
+  const tinf = parseFloat(document.getElementById('tinf').value) || 1;
+  const levelTime = parseFloat(document.getElementById('levelTime').value) || 0;
+  const levelConc = parseFloat(document.getElementById('levelConc').value) || 0;
+
+  const crclRaw = ((140 - age) * weight * (sex === 'female' ? 0.85 : 1)) / (72 * scr);
+  const crcl = Math.max(crclRaw, 1);
+  const dose = mgkg * weight;
+  const vd = 0.26 * weight;
+  const targetTrough = 2;
+
+  let startInterval = 'Not recommended (individualize)';
+  if (crcl >= 60) startInterval = 'q24h';
+  else if (crcl >= 40) startInterval = 'q36h';
+  else if (crcl >= 20) startInterval = 'q48h';
+
+  const ke24 = solveBoundaryKe(24, targetTrough, dose, vd, tinf);
+  const ke36 = solveBoundaryKe(36, targetTrough, dose, vd, tinf);
+  const ke48 = solveBoundaryKe(48, targetTrough, dose, vd, tinf);
+
+  const tMin = 4, tMax = 16, steps = 60;
+  const curve24 = [], curve36 = [], curve48 = [];
+  for (let i = 0; i <= steps; i++) {
+    const t = tMin + (tMax - tMin) * i / steps;
+    curve24.push({ t, c: concSingleDose(t, ke24, dose, vd, tinf) });
+    curve36.push({ t, c: concSingleDose(t, ke36, dose, vd, tinf) });
+    curve48.push({ t, c: concSingleDose(t, ke48, dose, vd, tinf) });
+  }
+
+  const b24 = concSingleDose(levelTime, ke24, dose, vd, tinf);
+  const b36 = concSingleDose(levelTime, ke36, dose, vd, tinf);
+  const b48 = concSingleDose(levelTime, ke48, dose, vd, tinf);
+
+  let zone = 'above';
+  let zoneLabel = 'Above Q48h boundary';
+  let zoneSub = 'Hold the next dose, recheck a level, and individualize dosing.';
+  let zoneColor = '#B91C1C';
+  let zoneBg = '#FEF2F2';
+  if (levelConc <= b24) {
+    zone = 'q24'; zoneLabel = 'Q24h zone'; zoneSub = 'Continue at the same dose every 24 hours.'; zoneColor = '#0F766E'; zoneBg = '#ECFDF9';
+  } else if (levelConc <= b36) {
+    zone = 'q36'; zoneLabel = 'Q36h zone'; zoneSub = 'Continue at the same dose every 36 hours.'; zoneColor = '#B45309'; zoneBg = '#FEF6E7';
+  } else if (levelConc <= b48) {
+    zone = 'q48'; zoneLabel = 'Q48h zone'; zoneSub = 'Continue at the same dose every 48 hours.'; zoneColor = '#B91C1C'; zoneBg = '#FEF2F2';
+  }
+
+  document.getElementById('doseOut').innerHTML = `${dose.toFixed(0)} <span class="unit-sm">mg</span>`;
+  document.getElementById('intervalOut').innerHTML = `${startInterval}`;
+
+  document.getElementById('derived').innerHTML = [
+    ['CrCl (Cockcroft-Gault)', crcl.toFixed(0) + ' mL/min'],
+    ['Vd (0.26 L/kg)', vd.toFixed(1) + ' L'],
+  ].map(([k,v]) => `<div class="derived-row"><span class="k">${k}</span><span class="v">${v}</span></div>`).join('');
+
+  const banner = document.getElementById('zoneBanner');
+  banner.style.background = zoneBg;
+  banner.style.borderColor = zoneColor + '33';
+  banner.innerHTML = `
+    <div class="zone-label" style="color:${zoneColor}">${zoneLabel}</div>
+    <div class="zone-value">Level ${levelConc.toFixed(1)} mg/L at ${levelTime.toFixed(1)}h</div>
+    <div class="zone-sub">${zoneSub}</div>
+  `;
+
+  drawChart(curve24, curve36, curve48, levelTime, levelConc, tMin, tMax);
+  document.getElementById('interpBody').innerHTML = buildInterpretation({
+    crcl, startInterval, zone, zoneLabel, levelTime, levelConc, drug: document.getElementById('drug').value,
+  });
+}
+
+function buildInterpretation(p) {
+  const drugName = p.drug.charAt(0).toUpperCase() + p.drug.slice(1);
+  const parts = [];
+
+  // Renal function
+  let renalNote;
+  if (p.crcl >= 60) renalNote = `Renal function is preserved (CrCl ${p.crcl.toFixed(0)} mL/min), consistent with a starting interval of ${p.startInterval}.`;
+  else if (p.crcl >= 20) renalNote = `Renal function is reduced (CrCl ${p.crcl.toFixed(0)} mL/min), which is why the starting interval widens to ${p.startInterval} — clearance is slower, so more time is needed to reach a safe trough.`;
+  else renalNote = `<span class="interp-flag stop">Flag</span>CrCl is ${p.crcl.toFixed(0)} mL/min — below the range extended-interval dosing was validated for. Traditional multiple-daily dosing with individualized PK (not this nomogram-style approach) is the appropriate method here.`;
+  parts.push(`<p>${renalNote}</p>`);
+
+  // Sample timing validity
+  if (p.levelTime < 6 || p.levelTime > 14) {
+    parts.push(`<p><span class="interp-flag watch">Watch</span>The level was drawn at ${p.levelTime.toFixed(1)}h, outside the validated 6–14h sampling window. Interval classification from a level outside this window is unreliable — redraw within 6–14h post-infusion before acting on the result.</p>`);
+  }
+
+  // Zone vs. starting interval reconciliation
+  const zoneOrder = { q24: 0, q36: 1, q48: 2, above: 3 };
+  const startOrder = { 'q24h': 0, 'q36h': 1, 'q48h': 2, 'Not recommended (individualize)': 3 };
+  const zRank = zoneOrder[p.zone];
+  const sRank = startOrder[p.startInterval];
+  if (p.zone !== 'above' && zRank === sRank) {
+    parts.push(`<p><span class="interp-flag ok">Consistent</span>The measured level places this patient in the ${p.zoneLabel.toLowerCase()}, matching the CrCl-predicted starting interval. No adjustment needed based on this level.</p>`);
+  } else if (p.zone !== 'above' && zRank > sRank) {
+    parts.push(`<p><span class="interp-flag watch">Watch</span>The level suggests clearance is slower than the CrCl estimate predicted — the measured concentration falls in the ${p.zoneLabel.toLowerCase()} rather than the CrCl-predicted ${p.startInterval}. Lengthen the interval accordingly and consider whether renal function has changed since the CrCl was last calculated.</p>`);
+  } else if (p.zone !== 'above' && zRank < sRank) {
+    parts.push(`<p><span class="interp-flag ok">Faster than predicted</span>The level suggests clearance is faster than the CrCl estimate predicted — consider whether the interval can be shortened, and confirm the CrCl inputs (weight, SCr) are current.</p>`);
+  } else if (p.zone === 'above') {
+    parts.push(`<p><span class="interp-flag stop">Stop</span>The level is above the q48h boundary. ${drugName} carries dose-dependent nephrotoxicity and ototoxicity risk — hold the next dose, recheck a level in ~24h, and involve pharmacy/nephrology before resuming.</p>`);
+  }
+
+  parts.push(`
+    <p style="margin-bottom:6px; font-weight:600; font-size:12px; color:#8891A0; text-transform:uppercase; letter-spacing:0.04em;">Next steps</p>
+    <ul>
+      <li>Recheck a random level within the 6–14h window before the next scheduled dose, especially if renal function is changing.</li>
+      <li>Trend serum creatinine at least every other day — extended-interval dosing assumes stable renal function.</li>
+      <li>Reassess ongoing need for aminoglycoside therapy daily; extended-interval dosing is not validated in pregnancy, significant ascites/burns, or hemodialysis.</li>
+    </ul>
+  `);
+
+  return parts.join('');
+}
+
+function drawChart(c24, c36, c48, pt, pc, tMin, tMax) {
+  const svg = document.getElementById('chart');
+  const W = 640, H = 280, padL = 40, padR = 10, padT = 10, padB = 30;
+  const allC = c24.concat(c36, c48).map(p => p.c).concat([pc]);
+  const cMax = Math.max(...allC) * 1.15;
+
+  const x = t => padL + ((t - tMin) / (tMax - tMin)) * (W - padL - padR);
+  const y = c => H - padB - (Math.max(c,0) / cMax) * (H - padT - padB);
+
+  let gridLines = '';
+  for (let i = 0; i <= 4; i++) {
+    const gy = padT + i * (H - padT - padB) / 4;
+    const val = (cMax * (4 - i) / 4).toFixed(1);
+    gridLines += `<line x1="${padL}" y1="${gy}" x2="${W-padR}" y2="${gy}" stroke="#EAEDF1" stroke-dasharray="3,3"/>`;
+    gridLines += `<text x="${padL-6}" y="${gy+4}" font-size="11" fill="#8891A0" text-anchor="end">${val}</text>`;
+  }
+  let xLabels = '';
+  for (let tv = tMin; tv <= tMax; tv += 2) {
+    xLabels += `<text x="${x(tv)}" y="${H-8}" font-size="11" fill="#8891A0" text-anchor="middle">${tv}</text>`;
+  }
+
+  const pathOf = (curve) => curve.map((p,i) => `${i===0?'M':'L'} ${x(p.t).toFixed(1)} ${y(p.c).toFixed(1)}`).join(' ');
+
+  const ox = x(pt), oy = y(pc);
+
+  svg.innerHTML = `
+    ${gridLines}
+    ${xLabels}
+    <path d="${pathOf(c24)}" fill="none" stroke="#0F766E" stroke-width="2"/>
+    <path d="${pathOf(c36)}" fill="none" stroke="#B45309" stroke-width="2"/>
+    <path d="${pathOf(c48)}" fill="none" stroke="#B91C1C" stroke-width="2"/>
+    <circle cx="${ox.toFixed(1)}" cy="${oy.toFixed(1)}" r="5.5" fill="#6D28D9" stroke="#fff" stroke-width="2"/>
+  `;
+}
+
+render();
+</script>
+</body>
+</html>
