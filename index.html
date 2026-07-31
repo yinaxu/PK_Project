@@ -1,0 +1,106 @@
+<!doctype html>
+<html lang="en">
+<head>
+<meta charset="UTF-8" />
+<meta name="viewport" content="width=device-width, initial-scale=1.0" />
+<title>Clinical Pharmacokinetics Learning Lab</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link href="https://fonts.googleapis.com/css2?family=Newsreader:wght@500;600&family=Inter:wght@400;500;600;700&family=IBM+Plex+Mono:wght@400;500&display=swap" rel="stylesheet">
+<style>
+  :root {
+    --ink: #14213D; --muted: #8891A0; --muted-light: #B0B7C3;
+    --border: #EAEDF1; --bg: #FAFBFC; --card: #FFFFFF;
+    --teal: #0F766E; --amber: #B45309; --purple: #6D28D9;
+  }
+  * { box-sizing: border-box; }
+  body { margin: 0; background: var(--bg); color: var(--ink); font-family: 'Inter', sans-serif; }
+  .nav { display: flex; justify-content: space-between; align-items: center; flex-wrap: wrap; gap: 12px; padding: 20px 32px; border-bottom: 1px solid var(--border); background: #fff; }
+  .nav .brand { font-family: 'Newsreader', serif; font-weight: 600; font-size: 16px; color: var(--ink); text-decoration: none; }
+  .nav .links { display: flex; gap: 22px; }
+  .nav .links a { font-size: 13px; color: var(--muted); text-decoration: none; font-weight: 500; }
+  .nav .links a:hover { color: var(--ink); }
+
+  .hero { max-width: 760px; margin: 0 auto; text-align: center; padding: 90px 20px 50px; }
+  .eyebrow { font-size: 11px; font-weight: 700; letter-spacing: 0.14em; color: var(--teal); text-transform: uppercase; margin-bottom: 14px; }
+  h1 { font-family: 'Newsreader', serif; font-size: 44px; font-weight: 600; margin: 0; letter-spacing: -0.01em; line-height: 1.15; }
+  .hero p { font-size: 15.5px; color: var(--muted); max-width: 480px; margin: 18px auto 32px; line-height: 1.6; }
+  .cta { display: inline-block; background: var(--ink); color: #fff; text-decoration: none; font-size: 14px; font-weight: 600; padding: 13px 28px; border-radius: 10px; }
+  .cta:hover { background: #0B1730; }
+
+  .status-row { display: flex; justify-content: center; gap: 28px; margin-top: 44px; flex-wrap: wrap; }
+  .status-item { display: flex; align-items: center; gap: 8px; font-size: 13px; color: var(--muted); }
+  .status-item .check { color: var(--teal); font-weight: 700; }
+
+  .section { max-width: 900px; margin: 0 auto; padding: 70px 20px; }
+  .section-title { font-family: 'Newsreader', serif; font-size: 26px; font-weight: 600; margin-bottom: 36px; text-align: center; }
+
+  .projects { display: flex; flex-direction: column; gap: 18px; }
+  .project-card { background: var(--card); border: 1px solid var(--border); border-radius: 16px; padding: 30px 32px; display: flex; justify-content: space-between; align-items: center; gap: 24px; flex-wrap: wrap; }
+  .project-icon { font-size: 26px; }
+  .project-title { font-family: 'Newsreader', serif; font-size: 20px; font-weight: 600; margin: 6px 0 8px; }
+  .project-desc { font-size: 13.5px; color: var(--muted); line-height: 1.55; max-width: 480px; }
+  .project-left { display: flex; gap: 16px; align-items: flex-start; }
+  .project-btn { flex-shrink: 0; display: inline-block; border: 1px solid var(--border); text-decoration: none; color: var(--ink); font-size: 13px; font-weight: 600; padding: 10px 20px; border-radius: 9px; white-space: nowrap; }
+  .project-card.a .project-btn:hover { border-color: var(--teal); color: var(--teal); }
+  .project-card.b .project-btn:hover { border-color: var(--purple); color: var(--purple); }
+
+  footer { text-align: center; padding: 40px 20px 60px; font-size: 12px; color: var(--muted-light); }
+  footer a { color: var(--muted); }
+</style>
+</head>
+<body>
+  <nav class="nav">
+    <a href="index.html" class="brand">Clinical Pharmacokinetics Learning Lab</a>
+    <div class="links">
+      <a href="vancomycin-explorer.html">Vancomycin</a>
+      <a href="aminoglycoside-explorer.html">Aminoglycoside</a>
+      <a href="about.html">About</a>
+      <a href="references.html">References</a>
+      <a href="disclaimer.html">Disclaimer</a>
+    </div>
+  </nav>
+
+  <div class="hero">
+    <div class="eyebrow">Clinical Pharmacokinetics Learning Lab</div>
+    <h1>Interactive tools for learning precision dosing and Bayesian pharmacokinetics</h1>
+    <p>Model-informed dosing, explained from first principles — transparent equations, interactive concentration-time curves, and clinical reasoning you can actually see change as you adjust the inputs.</p>
+    <a class="cta" href="vancomycin-explorer.html">Launch Demo →</a>
+
+    <div class="status-row">
+      <div class="status-item"><span class="check">✓</span> Bayesian Vancomycin Explorer</div>
+      <div class="status-item"><span class="check">✓</span> Extended-Interval Aminoglycoside Explorer</div>
+    </div>
+  </div>
+
+  <div class="section">
+    <div class="section-title">Interactive Educational Tools</div>
+    <div class="projects">
+      <div class="project-card a">
+        <div class="project-left">
+          <div class="project-icon">🧪</div>
+          <div>
+            <div class="project-title">Bayesian Vancomycin Explorer</div>
+            <div class="project-desc">Learn how Bayesian estimation individualizes vancomycin dosing by comparing population PK predictions with patient-specific drug levels.</div>
+          </div>
+        </div>
+        <a class="project-btn" href="vancomycin-explorer.html">Launch Demo →</a>
+      </div>
+
+      <div class="project-card b">
+        <div class="project-left">
+          <div class="project-icon">💉</div>
+          <div>
+            <div class="project-title">Extended-Interval Aminoglycoside Explorer</div>
+            <div class="project-desc">Explore Hartford-style interval selection through interactive concentration-time curves and clinical interpretation.</div>
+          </div>
+        </div>
+        <a class="project-btn" href="aminoglycoside-explorer.html">Launch Demo →</a>
+      </div>
+    </div>
+  </div>
+
+  <footer>
+    Built for education, not clinical use — see the <a href="disclaimer.html">disclaimer</a>. · <a href="about.html">About this project</a> · <a href="references.html">References</a>
+  </footer>
+</body>
+</html>
