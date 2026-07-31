@@ -25,6 +25,16 @@
     font-family: 'Inter', sans-serif; padding: 32px 20px;
   }
   .wrap { max-width: 980px; margin: 0 auto; }
+  .top-nav {
+    display: flex; justify-content: space-between; align-items: center; gap: 12px;
+    padding: 12px 16px; margin: 0 auto 20px; max-width: 980px;
+    background: #fff; border: 1px solid var(--border); border-radius: 12px;
+    box-shadow: 0 1px 2px rgba(20, 33, 61, 0.04);
+  }
+  .top-nav .brand { font-family: 'Newsreader', serif; font-size: 15px; font-weight: 600; color: var(--ink); text-decoration: none; }
+  .top-nav .links { display: flex; gap: 12px; flex-wrap: wrap; }
+  .top-nav .links a { font-size: 13px; color: var(--muted); text-decoration: none; font-weight: 600; }
+  .top-nav .links a:hover { color: var(--ink); }
   .eyebrow {
     font-size: 11px; font-weight: 700; letter-spacing: 0.12em;
     color: var(--posterior); text-transform: uppercase; margin-bottom: 6px;
@@ -142,6 +152,16 @@
 </style>
 </head>
 <body>
+<div class="top-nav">
+  <a class="brand" href="index.html">Clinical Pharmacokinetics Learning Lab</a>
+  <div class="links">
+    <a href="index.html">Home</a>
+    <a href="aminoglycoside-dosing.html">Aminoglycoside</a>
+    <a href="about.html">About</a>
+    <a href="references.html">References</a>
+    <a href="disclaimer.html">Disclaimer</a>
+  </div>
+</div>
 <div class="wrap">
   <div class="eyebrow">Bayesian Forecasting · Prior vs. Posterior</div>
   <h1>Bayesian vs. Population Vancomycin Dosing</h1>
