@@ -1,0 +1,385 @@
+<!doctype html>
+<html lang="en">
+<head>
+<meta charset="UTF-8" />
+<meta name="viewport" content="width=device-width, initial-scale=1.0" />
+<title>Clinical Case: Why Did the Recommendation Change?</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link href="https://fonts.googleapis.com/css2?family=Newsreader:wght@500;600&family=Inter:wght@400;500;600;700&family=IBM+Plex+Mono:wght@400;500&display=swap" rel="stylesheet">
+<style>
+  :root {
+    --ink: #14213D; --muted: #8891A0; --muted-light: #B0B7C3;
+    --border: #EAEDF1; --input-border: #DDE2EA; --bg: #FAFBFC; --card: #FFFFFF;
+    --teal: #0F766E; --amber: #B45309; --red: #B91C1C; --purple: #6D28D9;
+  }
+  * { box-sizing: border-box; }
+  body { margin: 0; background: var(--bg); color: var(--ink); font-family: 'Inter', sans-serif; }
+  .nav { display: flex; justify-content: space-between; align-items: center; flex-wrap: wrap; gap: 12px; padding: 20px 32px; border-bottom: 1px solid var(--border); background: #fff; }
+  .nav .brand { font-family: 'Newsreader', serif; font-weight: 600; font-size: 16px; color: var(--ink); text-decoration: none; }
+  .nav .links { display: flex; gap: 22px; }
+  .nav .links a { font-size: 13px; color: var(--muted); text-decoration: none; font-weight: 500; }
+  .nav .links a:hover { color: var(--ink); }
+
+  .wrap { max-width: 1000px; margin: 0 auto; padding: 32px 20px 80px; }
+  .eyebrow { font-size: 11px; font-weight: 700; letter-spacing: 0.12em; color: var(--purple); text-transform: uppercase; margin-bottom: 6px; }
+  h1 { font-family: 'Newsreader', serif; font-size: 32px; font-weight: 600; margin: 0; letter-spacing: -0.01em; }
+  .subtitle { font-size: 13.5px; color: var(--muted); margin-top: 8px; max-width: 680px; line-height: 1.55; }
+
+  .question-card { background: #FAF8FF; border: 1px solid #E3D9F8; border-radius: 14px; padding: 18px 22px; margin-top: 22px; }
+  .question-card .q-label { font-size: 11px; font-weight: 700; text-transform: uppercase; letter-spacing: 0.06em; color: var(--purple); margin-bottom: 6px; }
+  .question-card .q-text { font-family: 'Newsreader', serif; font-size: 19px; font-weight: 600; color: var(--ink); }
+
+  .grid { display: grid; grid-template-columns: minmax(260px, 300px) 1fr; gap: 22px; margin-top: 24px; }
+  @media (max-width: 800px) { .grid { grid-template-columns: 1fr; } }
+  .card { background: var(--card); border: 1px solid var(--border); border-radius: 14px; padding: 20px; }
+  .section-label { font-size: 11.5px; font-weight: 700; color: var(--ink); margin-bottom: 14px; letter-spacing: 0.02em; }
+  .field-grid { display: grid; grid-template-columns: 1fr 1fr; gap: 12px; margin-bottom: 16px; }
+  label.field { display: flex; flex-direction: column; gap: 5px; font-size: 12px; }
+  label.field span.field-label { letter-spacing: 0.02em; text-transform: uppercase; font-size: 10.5px; font-weight: 600; color: var(--muted); }
+  .input-row { display: flex; align-items: baseline; gap: 5px; }
+  input[type=number], select {
+    width: 100%; font-family: 'IBM Plex Mono', monospace; font-size: 14px; color: var(--ink);
+    background: #fff; border: 1px solid var(--input-border); border-radius: 7px; padding: 8px 9px; outline: none;
+  }
+  input[type=number]:focus, select:focus { border-color: var(--purple); }
+  .unit { font-size: 11px; color: var(--muted); min-width: 26px; }
+  .subhead { font-size: 11px; font-weight: 700; text-transform: uppercase; letter-spacing: 0.05em; margin: 16px 0 10px; padding-top: 12px; border-top: 1px solid var(--border); }
+  .subhead.l1 { color: var(--amber); border-top: none; padding-top: 0; margin-top: 0; }
+  .subhead.l2 { color: var(--red); }
+  .subhead.renal { color: #2563EB; }
+
+  .chart-card { background: var(--card); border: 1px solid var(--border); border-radius: 14px; padding: 20px; }
+  .legend { display: flex; gap: 14px; margin-top: 10px; font-size: 11px; color: var(--muted); flex-wrap: wrap; }
+  .legend-item { display: flex; align-items: center; gap: 6px; }
+  .swatch { width: 16px; height: 2px; display: inline-block; }
+  .swatch.dot { width: 8px; height: 8px; border-radius: 50%; }
+
+  .stats-row { display: grid; grid-template-columns: repeat(3, 1fr); gap: 10px; margin-top: 16px; }
+  .stat { background: var(--card); border: 1px solid var(--border); border-radius: 12px; padding: 13px 15px; }
+  .stat.p0 { border-left: 3px solid var(--muted-light); }
+  .stat.p1 { border-left: 3px solid var(--amber); }
+  .stat.p2 { border-left: 3px solid var(--red); }
+  .stat .label { font-size: 10px; color: var(--muted); text-transform: uppercase; letter-spacing: 0.05em; margin-bottom: 5px; }
+  .stat .value { font-family: 'IBM Plex Mono', monospace; font-size: 19px; color: var(--ink); }
+  .stat .sub { font-size: 11px; color: var(--muted); margin-top: 3px; }
+
+  .narrative { margin-top: 22px; display: flex; flex-direction: column; gap: 14px; }
+  .step { background: var(--card); border: 1px solid var(--border); border-radius: 14px; padding: 20px 22px; display: flex; gap: 16px; }
+  .step-num { flex-shrink: 0; width: 30px; height: 30px; border-radius: 50%; display: flex; align-items: center; justify-content: center; font-family: 'IBM Plex Mono', monospace; font-size: 13px; font-weight: 600; color: #fff; }
+  .step-body h3 { font-family: 'Newsreader', serif; font-size: 16.5px; font-weight: 600; margin: 0 0 8px; }
+  .step-body p { font-size: 13.5px; line-height: 1.65; color: var(--ink); margin: 0 0 8px; }
+  .step-body p:last-child { margin-bottom: 0; }
+  .step-body ul { margin: 6px 0 0; padding-left: 18px; }
+  .step-body li { font-size: 13.5px; line-height: 1.6; color: var(--ink); margin-bottom: 4px; }
+
+  .disclaimer { font-size: 11.5px; color: var(--muted-light); line-height: 1.5; margin: 24px 4px 0; }
+</style>
+</head>
+<body>
+  <nav class="nav">
+    <a href="index.html" class="brand">Clinical Pharmacokinetics Learning Lab</a>
+    <div class="links">
+      <a href="vancomycin-explorer.html">Vancomycin</a>
+      <a href="aminoglycoside-explorer.html">Aminoglycoside</a>
+      <a href="case-explorer.html">Case Explorer</a>
+      <a href="about.html">About</a>
+      <a href="references.html">References</a>
+      <a href="disclaimer.html">Disclaimer</a>
+    </div>
+  </nav>
+
+  <div class="wrap">
+    <div class="eyebrow">Clinical Case Walkthrough</div>
+    <h1>Why Did the Bayesian Recommendation Change?</h1>
+    <p class="subtitle">Enter an initial regimen, two vancomycin levels, and a serum creatinine trend. The case below walks through how the estimate evolves at each step — the same reasoning a Bayesian dosing platform runs, made visible.</p>
+
+    <div class="question-card">
+      <div class="q-label">Clinical question</div>
+      <div class="q-text">A trough came back higher than expected on day 4, and renal function has shifted since admission. Is this a true change in clearance, or noise — and what should the next dose be?</div>
+    </div>
+
+    <div class="grid">
+      <div class="card">
+        <div class="section-label">PATIENT & REGIMEN</div>
+        <div class="field-grid">
+          <label class="field"><span class="field-label">Age</span>
+            <div class="input-row"><input type="number" id="age" value="67" step="1" /><span class="unit">yr</span></div>
+          </label>
+          <label class="field"><span class="field-label">Sex</span>
+            <select id="sex"><option value="male">Male</option><option value="female">Female</option></select>
+          </label>
+          <label class="field"><span class="field-label">Weight</span>
+            <div class="input-row"><input type="number" id="weight" value="82" step="1" /><span class="unit">kg</span></div>
+          </label>
+          <label class="field"><span class="field-label">MIC</span>
+            <div class="input-row"><input type="number" id="mic" value="1" step="0.5" /><span class="unit">mg/L</span></div>
+          </label>
+          <label class="field"><span class="field-label">Dose</span>
+            <div class="input-row"><input type="number" id="dose" value="1500" step="50" /><span class="unit">mg</span></div>
+          </label>
+          <label class="field"><span class="field-label">Interval</span>
+            <div class="input-row"><input type="number" id="tau" value="12" step="1" /><span class="unit">hr</span></div>
+          </label>
+          <label class="field"><span class="field-label">Infusion</span>
+            <div class="input-row"><input type="number" id="tinf" value="1.5" step="0.5" /><span class="unit">hr</span></div>
+          </label>
+        </div>
+
+        <div class="subhead renal">RENAL FUNCTION TREND</div>
+        <div class="field-grid">
+          <label class="field"><span class="field-label">SCr — day 1</span>
+            <div class="input-row"><input type="number" id="scr1" value="0.9" step="0.1" /><span class="unit">mg/dL</span></div>
+          </label>
+          <label class="field"><span class="field-label">SCr — day 4</span>
+            <div class="input-row"><input type="number" id="scr2" value="1.6" step="0.1" /><span class="unit">mg/dL</span></div>
+          </label>
+        </div>
+
+        <div class="subhead l1">LEVEL 1 (DAY 2)</div>
+        <div class="field-grid">
+          <label class="field"><span class="field-label">Drawn at</span>
+            <div class="input-row"><input type="number" id="t1" value="11" step="0.5" /><span class="unit">hr</span></div>
+          </label>
+          <label class="field"><span class="field-label">Level</span>
+            <div class="input-row"><input type="number" id="c1" value="14.2" step="0.1" /><span class="unit">mg/L</span></div>
+          </label>
+        </div>
+
+        <div class="subhead l2">LEVEL 2 (DAY 4)</div>
+        <div class="field-grid" style="margin-bottom:0;">
+          <label class="field"><span class="field-label">Drawn at</span>
+            <div class="input-row"><input type="number" id="t2" value="11" step="0.5" /><span class="unit">hr</span></div>
+          </label>
+          <label class="field"><span class="field-label">Level</span>
+            <div class="input-row"><input type="number" id="c2" value="19.5" step="0.1" /><span class="unit">mg/L</span></div>
+          </label>
+        </div>
+      </div>
+
+      <div>
+        <div class="chart-card">
+          <div class="section-label">CONCENTRATION-TIME: POPULATION → POSTERIOR 1 → POSTERIOR 2</div>
+          <svg id="chart" width="100%" height="270" viewBox="0 0 640 270"></svg>
+          <div class="legend">
+            <div class="legend-item"><span class="swatch" style="border-top:2px dashed #B0B7C3;"></span>Population prior</div>
+            <div class="legend-item"><span class="swatch" style="background:#B45309;"></span>Posterior after level 1</div>
+            <div class="legend-item"><span class="swatch" style="background:#B91C1C;"></span>Posterior after level 2</div>
+            <div class="legend-item"><span class="swatch dot" style="background:#B45309;"></span>Level 1</div>
+            <div class="legend-item"><span class="swatch dot" style="background:#B91C1C;"></span>Level 2</div>
+          </div>
+        </div>
+
+        <div class="stats-row">
+          <div class="stat p0"><div class="label">Population AUC24</div><div class="value" id="auc0">–</div></div>
+          <div class="stat p1"><div class="label">After level 1</div><div class="value" id="auc1">–</div></div>
+          <div class="stat p2"><div class="label">After level 2</div><div class="value" id="auc2">–</div></div>
+        </div>
+      </div>
+    </div>
+
+    <div class="narrative" id="narrative"></div>
+
+    <p class="disclaimer">Sequential single-parameter MAP updates on clearance (Vd fixed at 0.7 L/kg), log-normal prior (30% CV), 20% proportional residual error. The prior feeding the second update blends the day-2 posterior with the population estimate recalculated at the day-4 SCr, representing how a clinician would weigh both the individual's observed data and a documented renal function change. Simplified for illustration — not for clinical use. See <a href="disclaimer.html">disclaimer</a>.</p>
+  </div>
+
+<script>
+const ids = ['age','sex','weight','mic','dose','tau','tinf','scr1','scr2','t1','c1','t2','c2'];
+ids.forEach(id => document.getElementById(id).addEventListener('input', render));
+
+function concAt(t, ke, cl, dose, tau, tinf) {
+  if (t <= tinf) return ((dose / (cl * tinf)) * (1 - Math.exp(-ke * t))) / (1 - Math.exp(-ke * tau));
+  const cmax = ((dose / (cl * tinf)) * (1 - Math.exp(-ke * tinf))) / (1 - Math.exp(-ke * tau));
+  return cmax * Math.exp(-ke * (t - tinf));
+}
+
+function goldenSectionMin(f, a, b, tol) {
+  const gr = (Math.sqrt(5) - 1) / 2;
+  let c = b - gr * (b - a), d = a + gr * (b - a), iter = 0;
+  while (Math.abs(b - a) > tol && iter < 200) {
+    if (f(c) < f(d)) { b = d; } else { a = c; }
+    c = b - gr * (b - a); d = a + gr * (b - a); iter++;
+  }
+  return (a + b) / 2;
+}
+
+function clFromCrCl(crcl) { return (0.695 * crcl + 0.05) * 0.06; }
+function crclOf(age, weight, sex, scr) {
+  return Math.max(((140 - age) * weight * (sex === 'female' ? 0.85 : 1)) / (72 * scr), 1);
+}
+
+function mapUpdate(priorMeanCl, priorCV, obsTime, obsConc, dose, vd, tau, tinf, sigmaProp) {
+  const omega = Math.sqrt(Math.log(1 + priorCV * priorCV));
+  const tWithin = ((obsTime % tau) + tau) % tau;
+  const objective = (cl) => {
+    const ke = cl / vd;
+    const cpred = Math.max(concAt(tWithin, ke, cl, dose, tau, tinf), 0.05);
+    const priorTerm = Math.pow((Math.log(cl) - Math.log(priorMeanCl)) / omega, 2);
+    const resTerm = Math.pow((obsConc - cpred) / (sigmaProp * cpred), 2);
+    return priorTerm + resTerm;
+  };
+  return goldenSectionMin(objective, priorMeanCl * 0.1, priorMeanCl * 6, 1e-5);
+}
+
+function metricsFor(cl, vd, dose, tau, tinf, mic) {
+  const ke = cl / vd;
+  const dailyDose = dose * (24 / tau);
+  const auc24 = dailyDose / cl;
+  return { cl, ke, cmax: concAt(tinf, ke, cl, dose, tau, tinf), cmin: concAt(tau, ke, cl, dose, tau, tinf), auc24, aucMic: auc24 / mic };
+}
+
+function zoneOf(auc) { return auc < 400 ? 'below' : (auc <= 600 ? 'target' : 'above'); }
+function zoneWord(z) { return z === 'target' ? 'in target range' : (z === 'below' ? 'below target' : 'above target'); }
+
+function render() {
+  const age = +document.getElementById('age').value || 0;
+  const sex = document.getElementById('sex').value;
+  const weight = +document.getElementById('weight').value || 0;
+  const mic = +document.getElementById('mic').value || 1;
+  const dose = +document.getElementById('dose').value || 0;
+  const tau = +document.getElementById('tau').value || 1;
+  const tinf = +document.getElementById('tinf').value || 0.5;
+  const scr1 = +document.getElementById('scr1').value || 0.1;
+  const scr2 = +document.getElementById('scr2').value || 0.1;
+  const t1 = +document.getElementById('t1').value || 0;
+  const c1 = +document.getElementById('c1').value || 0;
+  const t2 = +document.getElementById('t2').value || 0;
+  const c2 = +document.getElementById('c2').value || 0;
+
+  const vd = 0.7 * weight;
+  const crcl1 = crclOf(age, weight, sex, scr1);
+  const crcl2 = crclOf(age, weight, sex, scr2);
+  const clPop1 = clFromCrCl(crcl1);
+  const clPop2 = clFromCrCl(crcl2);
+
+  const m0 = metricsFor(clPop1, vd, dose, tau, tinf, mic);
+
+  const clPost1 = mapUpdate(clPop1, 0.30, t1, c1, dose, vd, tau, tinf, 0.20);
+  const m1 = metricsFor(clPost1, vd, dose, tau, tinf, mic);
+
+  // Blend day-2 individual posterior with day-4 population estimate as the prior feeding update 2
+  const priorMean2 = Math.exp((Math.log(clPost1) + Math.log(clPop2)) / 2);
+  const clPost2 = mapUpdate(priorMean2, 0.25, t2, c2, dose, vd, tau, tinf, 0.20);
+  const m2 = metricsFor(clPost2, vd, dose, tau, tinf, mic);
+
+  document.getElementById('auc0').textContent = m0.auc24.toFixed(0) + ' mg·h/L';
+  document.getElementById('auc1').textContent = m1.auc24.toFixed(0) + ' mg·h/L';
+  document.getElementById('auc2').textContent = m2.auc24.toFixed(0) + ' mg·h/L';
+
+  drawChart(m0, m1, m2, clPop1, clPost1, clPost2, vd, dose, tau, tinf, t1, c1, t2, c2);
+  document.getElementById('narrative').innerHTML = buildNarrative({
+    crcl1, crcl2, clPop1, clPop2, clPost1, clPost2, m0, m1, m2, t1, c1, t2, c2, scr1, scr2,
+  });
+}
+
+function buildNarrative(p) {
+  const renalDeltaPct = ((p.crcl2 - p.crcl1) / p.crcl1 * 100);
+  const renalDirection = renalDeltaPct < -10 ? 'worsened' : (renalDeltaPct > 10 ? 'improved' : 'stayed roughly stable');
+  const predAtT1 = null; // not used, placeholder for clarity
+
+  const step1 = `
+    <div class="step">
+      <div class="step-num" style="background:#B0B7C3;">1</div>
+      <div class="step-body">
+        <h3>Before any levels: the population prior</h3>
+        <p>Using age, weight, and the day-1 creatinine (${p.scr1.toFixed(1)} mg/dL → CrCl ${p.crcl1.toFixed(0)} mL/min), the population model estimates a clearance of ${p.clPop1.toFixed(2)} L/h. That alone predicts an AUC24 of ${p.m0.auc24.toFixed(0)} mg·h/L — ${zoneWord(zoneOf(p.m0.auc24))} against the 400–600 target. This is the best available estimate before we have any real data on this specific patient.</p>
+      </div>
+    </div>`;
+
+  const c1pred = null;
+  const deltaAuc1Pct = ((p.m1.auc24 - p.m0.auc24) / p.m0.auc24 * 100);
+  const step2 = `
+    <div class="step">
+      <div class="step-num" style="background:#B45309;">2</div>
+      <div class="step-body">
+        <h3>What level 1 told us</h3>
+        <p>A level of ${p.c1.toFixed(1)} mg/L was drawn at hour ${p.t1.toFixed(1)}. Combining that observation with the population prior (weighted by how much each is trusted — 30% prior uncertainty vs. a 20% assay/model error) pulls the clearance estimate to ${p.clPost1.toFixed(2)} L/h, ${p.clPost1 > p.clPop1 ? 'higher than' : 'lower than'} the population guess. The resulting AUC24 estimate moves to ${p.m1.auc24.toFixed(0)} mg·h/L (${deltaAuc1Pct >= 0 ? '+' : ''}${deltaAuc1Pct.toFixed(0)}% vs. the population-only estimate) — now ${zoneWord(zoneOf(p.m1.auc24))}. This is the platform doing its core job: replacing a population guess with an individualized one as soon as real data exists.</p>
+      </div>
+    </div>`;
+
+  const deltaAuc2Pct = ((p.m2.auc24 - p.m1.auc24) / p.m1.auc24 * 100);
+  const step3 = `
+    <div class="step">
+      <div class="step-num" style="background:#B91C1C;">3</div>
+      <div class="step-body">
+        <h3>Why the estimate changed again by day 4</h3>
+        <p>Two things happened between the two levels: creatinine rose from ${p.scr1.toFixed(1)} to ${p.scr2.toFixed(1)} mg/dL, and a second, higher level (${p.c2.toFixed(1)} mg/L at hour ${p.t2.toFixed(1)}) came back. Renal function ${renalDirection} over that window (CrCl ${p.crcl1.toFixed(0)} → ${p.crcl2.toFixed(0)} mL/min), which on its own would predict slower clearance (population estimate at the new SCr: ${p.clPop2.toFixed(2)} L/h). Blending that updated population expectation with what we already believed from level 1, then folding in the actual level 2 observation, produces a new clearance estimate of ${p.clPost2.toFixed(2)} L/h.</p>
+        <p>${Math.abs(deltaAuc2Pct) < 8 ? 'The day-4 posterior is close to where day 2 left off — the higher level is mostly explained by the renal function change already visible in the creatinine trend, not a surprise.' : 'The day-4 posterior moved more than the creatinine trend alone would explain — the level is doing real work here, not just confirming what the SCr already suggested.'}</p>
+      </div>
+    </div>`;
+
+  const finalZone = zoneOf(p.m2.auc24);
+  let recAction;
+  if (finalZone === 'target') recAction = 'Continue the current regimen — the updated estimate lands inside the target range.';
+  else if (finalZone === 'above') recAction = 'Consider extending the interval or reducing the dose — the updated estimate is above target, and with clearance trending down, a repeat level after any change is warranted.';
+  else recAction = 'Consider increasing the dose or shortening the interval — the updated estimate is below target.';
+  const step4 = `
+    <div class="step">
+      <div class="step-num" style="background:#0F766E;">4</div>
+      <div class="step-body">
+        <h3>Why the AUC recommendation changed</h3>
+        <p>AUC24 moved from ${p.m0.auc24.toFixed(0)} (population) → ${p.m1.auc24.toFixed(0)} (after level 1) → ${p.m2.auc24.toFixed(0)} mg·h/L (after level 2), ending ${zoneWord(finalZone)}. ${recAction}</p>
+      </div>
+    </div>`;
+
+  const confidencePoints = [];
+  if (Math.abs(p.t1 - p.t2) < 0.5) confidencePoints.push('Both levels were drawn at almost the same point in the dosing interval — a level at a different time point (e.g., a peak in addition to a trough) would constrain the estimate more than another level at the same time.');
+  if (Math.abs(deltaAuc2Pct) > 25) confidencePoints.push('The estimate moved substantially between levels — a third, confirmatory level after the current renal function stabilizes would help distinguish a true clearance shift from noise.');
+  confidencePoints.push('Confirming the SCr trend continues (rather than a single fluctuating value) would clarify whether renal function is still changing or has plateaued.');
+  confidencePoints.push('Verifying both levels were drawn at steady state (no recent dose or interval change) protects the assumption the model depends on.');
+
+  const step5 = `
+    <div class="step">
+      <div class="step-num" style="background:#6D28D9;">5</div>
+      <div class="step-body">
+        <h3>What would increase confidence in this estimate</h3>
+        <ul>${confidencePoints.map(c => `<li>${c}</li>`).join('')}</ul>
+      </div>
+    </div>`;
+
+  return step1 + step2 + step3 + step4 + step5;
+}
+
+function drawChart(m0, m1, m2, clPop1, clPost1, clPost2, vd, dose, tau, tinf, t1, c1, t2, c2) {
+  const svg = document.getElementById('chart');
+  const W = 640, H = 270, padL = 40, padR = 10, padT = 10, padB = 30;
+  const tMax = tau;
+  const ke0 = clPop1 / vd, ke1 = clPost1 / vd, ke2 = clPost2 / vd;
+
+  const curve = (ke, cl) => {
+    const pts = [];
+    for (let i = 0; i <= 50; i++) { const t = tMax * i / 50; pts.push({ t, c: concAt(t, ke, cl, dose, tau, tinf) }); }
+    return pts;
+  };
+  const c0 = curve(ke0, clPop1), c1curve = curve(ke1, clPost1), c2curve = curve(ke2, clPost2);
+  const allC = c0.concat(c1curve, c2curve).map(p => p.c).concat([c1, c2]);
+  const cMax = Math.max(...allC) * 1.15;
+
+  const x = t => padL + (Math.min(t, tMax) / tMax) * (W - padL - padR);
+  const y = c => H - padB - (Math.max(c,0) / cMax) * (H - padT - padB);
+
+  let gridLines = '';
+  for (let i = 0; i <= 4; i++) {
+    const gy = padT + i * (H - padT - padB) / 4;
+    gridLines += `<line x1="${padL}" y1="${gy}" x2="${W-padR}" y2="${gy}" stroke="#EAEDF1" stroke-dasharray="3,3"/>`;
+    gridLines += `<text x="${padL-6}" y="${gy+4}" font-size="11" fill="#8891A0" text-anchor="end">${(cMax*(4-i)/4).toFixed(0)}</text>`;
+  }
+  let xLabels = '';
+  for (let i = 0; i <= 6; i++) { const tv = tMax*i/6; xLabels += `<text x="${x(tv)}" y="${H-8}" font-size="11" fill="#8891A0" text-anchor="middle">${tv.toFixed(0)}</text>`; }
+
+  const path = (curve) => curve.map((p,i) => `${i===0?'M':'L'} ${x(p.t).toFixed(1)} ${y(p.c).toFixed(1)}`).join(' ');
+  const t1Within = ((t1 % tau) + tau) % tau, t2Within = ((t2 % tau) + tau) % tau;
+
+  svg.innerHTML = `
+    ${gridLines}${xLabels}
+    <path d="${path(c0)}" fill="none" stroke="#B0B7C3" stroke-width="2" stroke-dasharray="5,4"/>
+    <path d="${path(c1curve)}" fill="none" stroke="#B45309" stroke-width="2"/>
+    <path d="${path(c2curve)}" fill="none" stroke="#B91C1C" stroke-width="2.5"/>
+    <circle cx="${x(t1Within).toFixed(1)}" cy="${y(c1).toFixed(1)}" r="5" fill="#B45309" stroke="#fff" stroke-width="2"/>
+    <circle cx="${x(t2Within).toFixed(1)}" cy="${y(c2).toFixed(1)}" r="5" fill="#B91C1C" stroke="#fff" stroke-width="2"/>
+  `;
+}
+
+render();
+</script>
+</body>
+</html>

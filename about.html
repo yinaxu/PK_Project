@@ -1,177 +1,74 @@
 <!doctype html>
 <html lang="en">
 <head>
-  <meta charset="UTF-8" />
-  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-  <title>About | Clinical Pharmacokinetics Learning Lab</title>
-  <link rel="preconnect" href="https://fonts.googleapis.com">
-  <link href="https://fonts.googleapis.com/css2?family=Newsreader:wght@500;600&family=Inter:wght@400;500;600;700&display=swap" rel="stylesheet">
-  <style>
-    :root {
-      --ink: #14213D;
-      --muted: #8891A0;
-      --muted-light: #B0B7C3;
-      --border: #EAEDF1;
-      --bg: #FAFBFC;
-      --card: #FFFFFF;
-      --teal: #0F766E;
-      --amber: #B45309;
-      --purple: #6D28D9;
-    }
-    * { box-sizing: border-box; }
-    body {
-      margin: 0;
-      background: var(--bg);
-      color: var(--ink);
-      font-family: 'Inter', sans-serif;
-    }
-    .nav {
-      display: flex;
-      justify-content: space-between;
-      align-items: center;
-      flex-wrap: wrap;
-      gap: 12px;
-      padding: 20px 32px;
-      border-bottom: 1px solid var(--border);
-      background: #fff;
-    }
-    .nav .brand {
-      font-family: 'Newsreader', serif;
-      font-weight: 600;
-      font-size: 16px;
-      color: var(--ink);
-      text-decoration: none;
-    }
-    .nav .links { display: flex; gap: 22px; }
-    .nav .links a {
-      font-size: 13px;
-      color: var(--muted);
-      text-decoration: none;
-      font-weight: 500;
-    }
-    .nav .links a:hover,
-    .nav .links a.active {
-      color: var(--ink);
-    }
-    .wrap {
-      max-width: 860px;
-      margin: 0 auto;
-      padding: 56px 24px 72px;
-    }
-    .eyebrow {
-      font-size: 11px;
-      font-weight: 700;
-      letter-spacing: 0.14em;
-      color: var(--teal);
-      text-transform: uppercase;
-      margin-bottom: 12px;
-    }
-    h1 {
-      font-family: 'Newsreader', serif;
-      font-size: 36px;
-      font-weight: 600;
-      margin: 0 0 12px;
-      letter-spacing: -0.01em;
-      line-height: 1.15;
-    }
-    .lead {
-      font-size: 15px;
-      color: var(--muted);
-      line-height: 1.7;
-      max-width: 700px;
-      margin: 0 0 24px;
-    }
-    .card {
-      background: var(--card);
-      border: 1px solid var(--border);
-      border-radius: 16px;
-      padding: 28px 30px;
-      box-shadow: 0 1px 2px rgba(20, 33, 61, 0.04);
-    }
-    h2 {
-      font-family: 'Newsreader', serif;
-      font-size: 22px;
-      margin: 0 0 12px;
-    }
-    p {
-      font-size: 14.5px;
-      line-height: 1.7;
-      color: var(--muted);
-      margin: 0 0 14px;
-    }
-    .highlight {
-      background: #F8FAFC;
-      border-left: 4px solid var(--teal);
-      padding: 20px 22px;
-      border-radius: 10px;
-      margin: 28px 0 0;
-    }
-    .highlight h3 {
-      margin: 0 0 12px;
-      font-size: 16px;
-      color: var(--ink);
-    }
-    .highlight ul {
-      margin: 0;
-      padding-left: 18px;
-      color: var(--muted);
-    }
-    .highlight li {
-      margin-bottom: 10px;
-      line-height: 1.6;
-    }
-    .highlight strong { color: var(--ink); }
-    footer {
-      text-align: center;
-      padding: 32px 20px 48px;
-      font-size: 12px;
-      color: var(--muted-light);
-    }
-    footer a { color: var(--muted); }
-  </style>
+<meta charset="UTF-8" />
+<meta name="viewport" content="width=device-width, initial-scale=1.0" />
+<title>About — Clinical Pharmacokinetics Learning Lab</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link href="https://fonts.googleapis.com/css2?family=Newsreader:wght@500;600&family=Inter:wght@400;500;600;700&family=IBM+Plex+Mono:wght@400;500&display=swap" rel="stylesheet">
+<style>
+  :root { --ink: #14213D; --muted: #8891A0; --muted-light:#B0B7C3; --border: #EAEDF1; --bg: #FAFBFC; --teal: #0F766E; }
+  * { box-sizing: border-box; }
+  body { margin: 0; background: var(--bg); color: var(--ink); font-family: 'Inter', sans-serif; }
+  .nav { display: flex; justify-content: space-between; align-items: center; flex-wrap: wrap; gap: 12px; padding: 20px 32px; border-bottom: 1px solid var(--border); background: #fff; }
+  .nav .brand { font-family: 'Newsreader', serif; font-weight: 600; font-size: 16px; color: var(--ink); text-decoration: none; }
+  .nav .links { display: flex; gap: 22px; }
+  .nav .links a { font-size: 13px; color: var(--muted); text-decoration: none; font-weight: 500; }
+  .nav .links a:hover { color: var(--ink); }
+  .wrap { max-width: 680px; margin: 0 auto; padding: 70px 20px 100px; }
+  .eyebrow { font-size: 11px; font-weight: 700; letter-spacing: 0.12em; color: var(--teal); text-transform: uppercase; margin-bottom: 10px; }
+  h1 { font-family: 'Newsreader', serif; font-size: 34px; font-weight: 600; margin: 0 0 30px; }
+  h2 { font-family: 'Newsreader', serif; font-size: 20px; font-weight: 600; margin: 44px 0 12px; }
+  p { font-size: 14.5px; line-height: 1.7; color: var(--ink); margin: 0 0 14px; }
+  ul { padding-left: 20px; margin: 0 0 14px; }
+  li { font-size: 14.5px; line-height: 1.7; color: var(--ink); margin-bottom: 4px; }
+  .quote { border-left: 3px solid var(--teal); padding: 4px 0 4px 20px; margin: 24px 0; font-size: 14.5px; line-height: 1.75; color: var(--ink); font-style: italic; }
+</style>
 </head>
 <body>
   <nav class="nav">
     <a href="index.html" class="brand">Clinical Pharmacokinetics Learning Lab</a>
     <div class="links">
-      <a href="bayesian-dosing.html">Vancomycin</a>
-      <a href="aminoglycoside-dosing.html">Aminoglycoside</a>
-      <a href="about.html" class="active">About</a>
+      <a href="vancomycin-explorer.html">Vancomycin</a>
+      <a href="aminoglycoside-explorer.html">Aminoglycoside</a>
+      <a href="case-explorer.html">Case Explorer</a>
+      <a href="about.html">About</a>
       <a href="references.html">References</a>
       <a href="disclaimer.html">Disclaimer</a>
     </div>
   </nav>
 
   <div class="wrap">
-    <div class="eyebrow">About the project & creator</div>
-   
-    <p class="lead">
-      I am a pharmacist interested in how technology, software, and artificial intelligence can transform clinical workflows, therapeutic decision-making, and healthcare education.
-    </p>
+    <div class="eyebrow">About</div>
+    <h1>Clinical Pharmacokinetics Learning Lab</h1>
 
-    <div class="card">
-      <h2>Project Overview</h2>
-      <p>
-        Modern therapeutic drug monitoring is rapidly shifting toward <strong>Model-Informed Precision Dosing (MIPD)</strong> and software-guided decision support. However, many clinical tools operate as “black boxes,” obscuring the mathematical transitions between population models and patient-specific dosing.
-      </p>
-      <p>
-        I built the <em>Clinical Pharmacokinetics Learning Lab</em> to explore how interactive web tools can make complex pharmacokinetics—from Bayesian parameter estimation to Hartford nomogram interval selection—more visual, transparent, and intuitive.
-      </p>
+    <h2>Overview</h2>
+    <p>This project contains interactive educational demonstrations illustrating core principles of model-informed precision dosing. The goal is not to replace validated clinical software, but to help pharmacists, students, and clinicians understand the pharmacokinetic concepts underlying therapeutic drug monitoring.</p>
+    <p>Topics include:</p>
+    <ul>
+      <li>Bayesian forecasting</li>
+      <li>Population pharmacokinetics</li>
+      <li>MAP estimation</li>
+      <li>Vancomycin AUC monitoring</li>
+      <li>Extended-interval aminoglycoside dosing</li>
+      <li>Clinical decision support</li>
+    </ul>
 
-      <div class="highlight">
-        <h3>What This Portfolio Demonstrates</h3>
-        <ul>
-          <li><strong>Clinical Translation:</strong> Translating clinical guidelines (such as ASHP/IDSA vancomycin consensus guidelines and Hartford nomograms) into structured digital interfaces.</li>
-          <li><strong>Tech &amp; AI Aptitude:</strong> Utilizing modern web technologies and AI-assisted tools to prototype functional, interactive healthcare solutions.</li>
-          <li><strong>Product &amp; Visual Sense:</strong> Designing user-centered interfaces that break down multi-step calculations into clear visual insights.</li>
-          <li><strong>Adaptability &amp; Rapid Learning:</strong> Independently diving into health-system concepts, pharmacokinetics modeling, and modern tools to bridge clinical knowledge with digital delivery.</li>
-        </ul>
-      </div>
+    <h2>Philosophy</h2>
+    <p>Each project emphasizes:</p>
+    <ul>
+      <li>Transparent equations</li>
+      <li>Interactive visualizations</li>
+      <li>Clinical reasoning</li>
+      <li>Evidence-based references</li>
+      <li>Educational explanations</li>
+    </ul>
+    <p>...rather than serving as production clinical software.</p>
+
+    <h2>About This Project</h2>
+    <div class="quote">
+      As a community pharmacist transitioning into health technology, I wanted to better understand the pharmacokinetic principles behind model-informed precision dosing. Rather than only reading about Bayesian forecasting and extended-interval dosing, I implemented interactive educational tools from first principles. These projects are intended to help learners visualize how pharmacokinetic models inform clinical decisions, and are not validated for patient care.
     </div>
   </div>
-
-  <footer>
-    Built for education, not clinical use — see the <a href="disclaimer.html">disclaimer</a>. · <a href="about.html">About this project</a> · <a href="references.html">References</a>
-  </footer>
 </body>
 </html>

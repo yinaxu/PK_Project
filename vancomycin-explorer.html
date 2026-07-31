@@ -1,0 +1,362 @@
+<!doctype html>
+<html lang="en">
+<head>
+<meta charset="UTF-8" />
+<meta name="viewport" content="width=device-width, initial-scale=1.0" />
+<title>Bayesian Vancomycin Explorer — Clinical Pharmacokinetics Learning Lab</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link href="https://fonts.googleapis.com/css2?family=Newsreader:wght@500;600&family=Inter:wght@400;500;600;700&family=IBM+Plex+Mono:wght@400;500&display=swap" rel="stylesheet">
+<style>
+  :root {
+    --ink: #14213D; --muted: #8891A0; --muted-light: #B0B7C3;
+    --border: #EAEDF1; --input-border: #DDE2EA; --accent: #0F766E;
+    --prior: #94A3B8; --posterior: #B45309; --bg: #FAFBFC; --card: #FFFFFF;
+  }
+  * { box-sizing: border-box; }
+  body { margin: 0; background: var(--bg); color: var(--ink); font-family: 'Inter', sans-serif; }
+  .nav { display: flex; justify-content: space-between; align-items: center; flex-wrap: wrap; gap: 12px; padding: 20px 32px; border-bottom: 1px solid var(--border); background: #fff; }
+  .nav .brand { font-family: 'Newsreader', serif; font-weight: 600; font-size: 16px; color: var(--ink); text-decoration: none; }
+  .nav .links { display: flex; gap: 22px; }
+  .nav .links a { font-size: 13px; color: var(--muted); text-decoration: none; font-weight: 500; }
+  .nav .links a:hover { color: var(--ink); }
+
+  .wrap { max-width: 980px; margin: 0 auto; padding: 32px 20px 80px; }
+  .eyebrow { font-size: 11px; font-weight: 700; letter-spacing: 0.12em; color: var(--posterior); text-transform: uppercase; margin-bottom: 6px; }
+  h1 { font-family: 'Newsreader', serif; font-size: 32px; font-weight: 600; margin: 0; letter-spacing: -0.01em; }
+  .subtitle { font-size: 13.5px; color: var(--muted); margin-top: 8px; max-width: 620px; line-height: 1.5; }
+
+  .question-card { background: #FFFBF5; border: 1px solid #F2D9B8; border-radius: 14px; padding: 18px 22px; margin-top: 22px; }
+  .question-card .q-label { font-size: 11px; font-weight: 700; text-transform: uppercase; letter-spacing: 0.06em; color: var(--posterior); margin-bottom: 6px; }
+  .question-card .q-text { font-family: 'Newsreader', serif; font-size: 18px; font-weight: 600; color: var(--ink); }
+
+  .grid { display: grid; grid-template-columns: minmax(260px, 320px) 1fr; gap: 24px; margin-top: 24px; }
+  @media (max-width: 760px) { .grid { grid-template-columns: 1fr; } }
+  .card { background: var(--card); border: 1px solid var(--border); border-radius: 14px; padding: 22px; }
+  .section-label { font-size: 12px; font-weight: 700; color: var(--ink); margin-bottom: 16px; letter-spacing: 0.02em; }
+  .section-label.obs { color: var(--posterior); display: flex; align-items: center; gap: 6px; }
+  .field-grid { display: grid; grid-template-columns: 1fr 1fr; gap: 14px; margin-bottom: 20px; }
+  label.field { display: flex; flex-direction: column; gap: 6px; font-size: 12.5px; }
+  label.field span.field-label { letter-spacing: 0.02em; text-transform: uppercase; font-size: 11px; font-weight: 600; color: var(--muted); }
+  .input-row { display: flex; align-items: baseline; gap: 6px; }
+  input[type=number], select {
+    width: 100%; font-family: 'IBM Plex Mono', monospace; font-size: 15px; color: var(--ink);
+    background: #fff; border: 1px solid var(--input-border); border-radius: 8px; padding: 9px 10px; outline: none;
+  }
+  input[type=number]:focus, select:focus { border-color: var(--accent); }
+  .unit { font-size: 12px; color: var(--muted); min-width: 30px; }
+  .obs-card { border: 1px solid #F2D9B8; background: #FFFBF5; border-radius: 12px; padding: 16px; margin-bottom: 20px; }
+  .derived { border-top: 1px solid var(--border); padding-top: 16px; display: flex; flex-direction: column; gap: 9px; }
+  .derived-row { display: flex; justify-content: space-between; font-size: 12.5px; }
+  .derived-row .k { color: var(--muted); }
+  .derived-row .v { font-family: 'IBM Plex Mono', monospace; color: var(--ink); }
+
+  .compare-row { display: grid; grid-template-columns: 1fr 1fr; gap: 12px; }
+  .compare-card { background: var(--card); border: 1px solid var(--border); border-radius: 14px; padding: 16px 18px; }
+  .compare-card.prior { border-left: 3px solid var(--prior); }
+  .compare-card.posterior { border-left: 3px solid var(--posterior); }
+  .compare-title { font-size: 11px; font-weight: 700; text-transform: uppercase; letter-spacing: 0.06em; margin-bottom: 10px; }
+  .compare-title.prior { color: var(--prior); }
+  .compare-title.posterior { color: var(--posterior); }
+  .compare-metric { display: flex; justify-content: space-between; font-size: 12.5px; padding: 3px 0; }
+  .compare-metric .k { color: var(--muted); }
+  .compare-metric .v { font-family: 'IBM Plex Mono', monospace; color: var(--ink); font-weight: 500; }
+  .compare-metric .v.big { font-size: 17px; }
+
+  .chart-card { background: var(--card); border: 1px solid var(--border); border-radius: 14px; padding: 20px; margin-top: 16px; }
+  .legend { display: flex; gap: 18px; margin-top: 10px; font-size: 11.5px; color: var(--muted); }
+  .legend-item { display: flex; align-items: center; gap: 6px; }
+  .swatch { width: 16px; height: 2px; display: inline-block; }
+  .swatch.dot { width: 8px; height: 8px; border-radius: 50%; }
+  .hint { font-size: 11.5px; color: var(--posterior); margin-top: -8px; margin-bottom: 16px; }
+
+  .teaching { margin-top: 40px; }
+  .teaching h2 { font-family: 'Newsreader', serif; font-size: 22px; font-weight: 600; margin-bottom: 16px; }
+  .teaching-points { display: flex; flex-direction: column; gap: 12px; }
+  .tp { background: var(--card); border: 1px solid var(--border); border-radius: 12px; padding: 16px 18px; display: flex; gap: 14px; }
+  .tp .n { font-family: 'IBM Plex Mono', monospace; font-size: 13px; color: var(--posterior); font-weight: 700; flex-shrink: 0; }
+  .tp p { font-size: 13.5px; line-height: 1.6; color: var(--ink); margin: 0; }
+
+  .refs { margin-top: 32px; font-size: 12.5px; color: var(--muted); line-height: 1.7; }
+  .refs a { color: var(--accent); }
+  .disclaimer { font-size: 11.5px; color: var(--muted-light); line-height: 1.5; margin: 24px 4px 0; }
+</style>
+</head>
+<body>
+  <nav class="nav">
+    <a href="index.html" class="brand">Clinical Pharmacokinetics Learning Lab</a>
+    <div class="links">
+      <a href="vancomycin-explorer.html">Vancomycin</a>
+      <a href="aminoglycoside-explorer.html">Aminoglycoside</a>
+      <a href="case-explorer.html">Case Explorer</a>
+      <a href="about.html">About</a>
+      <a href="references.html">References</a>
+      <a href="disclaimer.html">Disclaimer</a>
+    </div>
+  </nav>
+
+  <div class="wrap">
+    <div class="eyebrow">Bayesian Forecasting · Prior vs. Posterior</div>
+    <h1>Bayesian Vancomycin Explorer</h1>
+    <p class="subtitle">Starts from a population PK prior, then updates it with an observed drug level using MAP (maximum a posteriori) estimation — the core mechanism behind individualized Bayesian dosing software.</p>
+
+    <div class="question-card">
+      <div class="q-label">Clinical question</div>
+      <div class="q-text">A patient's trough came back higher than the population model predicted. Does the dose need to change — and how much should that one level actually move our estimate?</div>
+    </div>
+
+    <div class="grid">
+      <div class="card">
+        <div class="section-label">PATIENT</div>
+        <div class="field-grid">
+          <label class="field"><span class="field-label">Age</span>
+            <div class="input-row"><input type="number" id="age" value="64" step="1" /><span class="unit">yr</span></div>
+          </label>
+          <label class="field"><span class="field-label">Sex</span>
+            <select id="sex"><option value="male">Male</option><option value="female">Female</option></select>
+          </label>
+          <label class="field"><span class="field-label">Weight</span>
+            <div class="input-row"><input type="number" id="weight" value="78" step="1" /><span class="unit">kg</span></div>
+          </label>
+          <label class="field"><span class="field-label">SCr</span>
+            <div class="input-row"><input type="number" id="scr" value="1.1" step="0.1" /><span class="unit">mg/dL</span></div>
+          </label>
+        </div>
+
+        <div class="section-label">REGIMEN</div>
+        <div class="field-grid">
+          <label class="field"><span class="field-label">Dose</span>
+            <div class="input-row"><input type="number" id="dose" value="1250" step="50" /><span class="unit">mg</span></div>
+          </label>
+          <label class="field"><span class="field-label">Interval</span>
+            <div class="input-row"><input type="number" id="tau" value="12" step="1" /><span class="unit">hr</span></div>
+          </label>
+          <label class="field"><span class="field-label">Infusion</span>
+            <div class="input-row"><input type="number" id="tinf" value="1.5" step="0.5" /><span class="unit">hr</span></div>
+          </label>
+          <label class="field"><span class="field-label">MIC</span>
+            <div class="input-row"><input type="number" id="mic" value="1" step="0.5" /><span class="unit">mg/L</span></div>
+          </label>
+        </div>
+
+        <div class="obs-card">
+          <div class="section-label obs">● OBSERVED LEVEL</div>
+          <div class="field-grid" style="margin-bottom:0;">
+            <label class="field"><span class="field-label">Drawn at</span>
+              <div class="input-row"><input type="number" id="levelTime" value="11" step="0.5" /><span class="unit">hr</span></div>
+            </label>
+            <label class="field"><span class="field-label">Level</span>
+              <div class="input-row"><input type="number" id="levelConc" value="9.8" step="0.1" /><span class="unit">mg/L</span></div>
+            </label>
+          </div>
+        </div>
+        <div class="hint" id="obsHint">Time is hours since the start of the dose being sampled. Set Level to 0 to hide the Bayesian update.</div>
+
+        <div class="derived" id="derived"></div>
+      </div>
+
+      <div>
+        <div class="compare-row">
+          <div class="compare-card prior">
+            <div class="compare-title prior">Population prior</div>
+            <div id="priorMetrics"></div>
+          </div>
+          <div class="compare-card posterior">
+            <div class="compare-title posterior">Bayesian posterior</div>
+            <div id="posteriorMetrics"></div>
+          </div>
+        </div>
+
+        <div class="chart-card">
+          <div class="section-label">CONCENTRATION-TIME: PRIOR VS. POSTERIOR</div>
+          <svg id="chart" width="100%" height="280" viewBox="0 0 640 280"></svg>
+          <div class="legend">
+            <div class="legend-item"><span class="swatch" style="background:none; border-top:2px dashed #94A3B8;"></span>Population prediction</div>
+            <div class="legend-item"><span class="swatch" style="background:#0F766E;"></span>Bayesian posterior</div>
+            <div class="legend-item"><span class="swatch dot" style="background:#B45309;"></span>Observed level</div>
+          </div>
+        </div>
+      </div>
+    </div>
+
+    <div class="teaching">
+      <h2>Teaching points</h2>
+      <div class="teaching-points">
+        <div class="tp"><div class="n">01</div><p>A population model predicts clearance from demographics alone. It's a reasonable starting guess, but real patients deviate — sometimes substantially — from the population average.</p></div>
+        <div class="tp"><div class="n">02</div><p>Bayesian (MAP) estimation combines that population prior with an observed level, weighting each by how much it's trusted: a tighter prior or a noisier assay shifts the balance one way or the other.</p></div>
+        <div class="tp"><div class="n">03</div><p>The AUC24:MIC target of 400–600 (rather than a fixed trough range) reflects that efficacy and nephrotoxicity both track total drug exposure over 24 hours, not any single concentration.</p></div>
+        <div class="tp"><div class="n">04</div><p>One level rarely pins down a patient's true clearance exactly — it narrows the estimate. A second level, especially at a different point in the dosing interval, narrows it further.</p></div>
+      </div>
+
+      <div class="refs">
+        See the full <a href="references.html">references page</a> for the vancomycin consensus guideline and the population clearance equation used here.
+      </div>
+      <p class="disclaimer">Single-parameter MAP update on clearance only (Vd fixed at population estimate), log-normal prior (30% CV), 20% proportional residual error. Simplified for illustration — production Bayesian dosing software (e.g. InsightRX Nova/Apollo) uses richer covariate models, multi-parameter posteriors, and validated priors. Not for clinical use — see <a href="disclaimer.html">disclaimer</a>.</p>
+    </div>
+  </div>
+
+<script>
+const ids = ['age','sex','weight','scr','dose','tau','tinf','mic','levelTime','levelConc'];
+ids.forEach(id => document.getElementById(id).addEventListener('input', render));
+
+function concAt(t, ke, cl, dose, tau, tinf) {
+  const cmaxLocal = (dose / (cl * tinf)) * ((1 - Math.exp(-ke * tinf)) / (1 - Math.exp(-ke * tau)));
+  if (t <= tinf) {
+    return ((dose / (cl * tinf)) * (1 - Math.exp(-ke * t))) / (1 - Math.exp(-ke * tau));
+  }
+  return cmaxLocal * Math.exp(-ke * (t - tinf));
+}
+
+function goldenSectionMin(f, a, b, tol) {
+  const gr = (Math.sqrt(5) - 1) / 2;
+  let c = b - gr * (b - a);
+  let d = a + gr * (b - a);
+  let iter = 0;
+  while (Math.abs(b - a) > tol && iter < 200) {
+    if (f(c) < f(d)) { b = d; } else { a = c; }
+    c = b - gr * (b - a);
+    d = a + gr * (b - a);
+    iter++;
+  }
+  return (a + b) / 2;
+}
+
+function calcAll() {
+  const age = parseFloat(document.getElementById('age').value) || 0;
+  const sex = document.getElementById('sex').value;
+  const weight = parseFloat(document.getElementById('weight').value) || 0;
+  const scr = parseFloat(document.getElementById('scr').value) || 0.1;
+  const dose = parseFloat(document.getElementById('dose').value) || 0;
+  const tau = parseFloat(document.getElementById('tau').value) || 1;
+  const tinf = parseFloat(document.getElementById('tinf').value) || 0.5;
+  const mic = parseFloat(document.getElementById('mic').value) || 1;
+  const levelTime = parseFloat(document.getElementById('levelTime').value) || 0;
+  const levelConc = parseFloat(document.getElementById('levelConc').value) || 0;
+
+  const crclRaw = ((140 - age) * weight * (sex === 'female' ? 0.85 : 1)) / (72 * scr);
+  const crcl = Math.max(crclRaw, 1);
+  const vd = 0.7 * weight;
+  const clPopMlMin = 0.695 * crcl + 0.05;
+  const clPop = clPopMlMin * 0.06;
+  const dailyDose = dose * (24 / tau);
+
+  function metricsFor(cl) {
+    const ke = cl / vd;
+    const halfLife = 0.693 / ke;
+    const cmax = concAt(tinf, ke, cl, dose, tau, tinf);
+    const cmin = concAt(tau, ke, cl, dose, tau, tinf);
+    const auc24 = dailyDose / cl;
+    return { cl, ke, halfLife, cmax, cmin, auc24, aucMic: auc24 / mic };
+  }
+
+  const prior = metricsFor(clPop);
+
+  let posterior = null;
+  let tWithin = ((levelTime % tau) + tau) % tau;
+  if (levelConc > 0) {
+    const cv = 0.30;
+    const omega = Math.sqrt(Math.log(1 + cv * cv));
+    const sigmaProp = 0.20;
+    const objective = (cl) => {
+      const ke = cl / vd;
+      const cpred = Math.max(concAt(tWithin, ke, cl, dose, tau, tinf), 0.05);
+      const priorTerm = Math.pow((Math.log(cl) - Math.log(clPop)) / omega, 2);
+      const resTerm = Math.pow((levelConc - cpred) / (sigmaProp * cpred), 2);
+      return priorTerm + resTerm;
+    };
+    const clMap = goldenSectionMin(objective, clPop * 0.15, clPop * 4, 1e-5);
+    posterior = metricsFor(clMap);
+  }
+
+  const curvePop = [];
+  const curvePost = [];
+  for (let cycle = 0; cycle < 2; cycle++) {
+    const base = cycle * tau;
+    for (let t = 0; t <= tau; t += tau / 50) {
+      curvePop.push({ t: base + t, conc: concAt(t, prior.ke, clPop, dose, tau, tinf) });
+      if (posterior) curvePost.push({ t: base + t, conc: concAt(t, posterior.ke, posterior.cl, dose, tau, tinf) });
+    }
+  }
+
+  return { crcl, vd, clPop, prior, posterior, curvePop, curvePost, tWithin, levelConc };
+}
+
+function render() {
+  const r = calcAll();
+
+  document.getElementById('derived').innerHTML = [
+    ['CrCl (Cockcroft-Gault)', r.crcl.toFixed(0) + ' mL/min'],
+    ['Vd (fixed, 0.7 L/kg)', r.vd.toFixed(1) + ' L'],
+    ['CL — population prior', r.clPop.toFixed(2) + ' L/h'],
+  ].map(([k,v]) => `<div class="derived-row"><span class="k">${k}</span><span class="v">${v}</span></div>`).join('');
+
+  const p = r.prior;
+  document.getElementById('priorMetrics').innerHTML = `
+    <div class="compare-metric"><span class="k">CL</span><span class="v">${p.cl.toFixed(2)} L/h</span></div>
+    <div class="compare-metric"><span class="k">Cmax / Cmin</span><span class="v">${p.cmax.toFixed(1)} / ${p.cmin.toFixed(1)} mg/L</span></div>
+    <div class="compare-metric"><span class="k">AUC24</span><span class="v big">${p.auc24.toFixed(0)} mg\u00B7h/L</span></div>
+  `;
+
+  const post = r.posterior;
+  if (post) {
+    const deltaPct = ((post.auc24 - p.auc24) / p.auc24 * 100);
+    document.getElementById('posteriorMetrics').innerHTML = `
+      <div class="compare-metric"><span class="k">CL</span><span class="v">${post.cl.toFixed(2)} L/h</span></div>
+      <div class="compare-metric"><span class="k">Cmax / Cmin</span><span class="v">${post.cmax.toFixed(1)} / ${post.cmin.toFixed(1)} mg/L</span></div>
+      <div class="compare-metric"><span class="k">AUC24</span><span class="v big">${post.auc24.toFixed(0)} mg\u00B7h/L</span></div>
+      <div class="compare-metric"><span class="k">vs. prior</span><span class="v" style="color:${deltaPct>=0?'#B91C1C':'#0F766E'}">${deltaPct>=0?'+':''}${deltaPct.toFixed(0)}%</span></div>
+    `;
+  } else {
+    document.getElementById('posteriorMetrics').innerHTML = `<div style="font-size:12.5px; color:var(--muted); padding:6px 0;">Enter a level above 0 to compute the posterior.</div>`;
+  }
+
+  drawChart(r);
+}
+
+function drawChart(r) {
+  const svg = document.getElementById('chart');
+  const W = 640, H = 280, padL = 40, padR = 10, padT = 10, padB = 30;
+  const tMax = r.curvePop[r.curvePop.length - 1].t;
+  let allConc = r.curvePop.map(p => p.conc);
+  if (r.curvePost.length) allConc = allConc.concat(r.curvePost.map(p => p.conc));
+  if (r.levelConc > 0) allConc.push(r.levelConc);
+  const cMax = Math.max(...allConc) * 1.15;
+
+  const x = t => padL + (t / tMax) * (W - padL - padR);
+  const y = c => H - padB - (c / cMax) * (H - padT - padB);
+
+  let gridLines = '';
+  for (let i = 0; i <= 4; i++) {
+    const gy = padT + i * (H - padT - padB) / 4;
+    const val = (cMax * (4 - i) / 4).toFixed(0);
+    gridLines += `<line x1="${padL}" y1="${gy}" x2="${W-padR}" y2="${gy}" stroke="#EAEDF1" stroke-dasharray="3,3"/>`;
+    gridLines += `<text x="${padL-6}" y="${gy+4}" font-size="11" fill="#8891A0" text-anchor="end">${val}</text>`;
+  }
+  let xLabels = '';
+  const steps = 6;
+  for (let i = 0; i <= steps; i++) {
+    const tv = (tMax * i / steps);
+    xLabels += `<text x="${x(tv)}" y="${H-8}" font-size="11" fill="#8891A0" text-anchor="middle">${tv.toFixed(0)}</text>`;
+  }
+
+  const popPath = r.curvePop.map((pt,i) => `${i===0?'M':'L'} ${x(pt.t).toFixed(1)} ${y(pt.conc).toFixed(1)}`).join(' ');
+  const postPath = r.curvePost.length ? r.curvePost.map((pt,i) => `${i===0?'M':'L'} ${x(pt.t).toFixed(1)} ${y(pt.conc).toFixed(1)}`).join(' ') : '';
+
+  let obsDot = '';
+  if (r.levelConc > 0) {
+    const ox = x(r.tWithin), oy = y(r.levelConc);
+    obsDot = `<circle cx="${ox.toFixed(1)}" cy="${oy.toFixed(1)}" r="5" fill="#B45309" stroke="#fff" stroke-width="2"/>`;
+  }
+
+  svg.innerHTML = `
+    ${gridLines}
+    ${xLabels}
+    <path d="${popPath}" fill="none" stroke="#94A3B8" stroke-width="2" stroke-dasharray="5,4"/>
+    ${postPath ? `<path d="${postPath}" fill="none" stroke="#0F766E" stroke-width="2.5"/>` : ''}
+    ${obsDot}
+  `;
+}
+
+render();
+</script>
+</body>
+</html>
