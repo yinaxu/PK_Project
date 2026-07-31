@@ -71,13 +71,86 @@
   .swatch.dot { width: 8px; height: 8px; border-radius: 50%; }
   .disclaimer { font-size: 11.5px; color: var(--muted-light); line-height: 1.5; margin: 14px 4px 0; }
   .hint { font-size: 11.5px; color: var(--posterior); margin-top: -8px; margin-bottom: 16px; }
+
+  /* --- Next dose recommendation --- */
+  .next-dose {
+    background: var(--card); border: 1px solid var(--border); border-left: 4px solid var(--accent);
+    border-radius: 12px; padding: 20px 24px; margin-top: 24px;
+  }
+  .next-dose .tag {
+    font-size: 11px; font-weight: 700; letter-spacing: 0.1em; text-transform: uppercase;
+    color: var(--accent); margin-bottom: 10px;
+  }
+  .next-dose .headline { font-family: 'Newsreader', serif; font-size: 20px; font-weight: 600; color: var(--ink); margin: 0 0 6px; }
+  .next-dose .sub { font-size: 13px; color: var(--muted); line-height: 1.6; margin: 0 0 14px; }
+  .next-dose .nd-grid { display: grid; grid-template-columns: repeat(auto-fit, minmax(140px, 1fr)); gap: 14px; margin-bottom: 12px; }
+  .next-dose .nd-stat .k { font-size: 11px; text-transform: uppercase; letter-spacing: 0.04em; color: var(--muted); margin-bottom: 3px; }
+  .next-dose .nd-stat .v { font-family: 'IBM Plex Mono', monospace; font-size: 16px; color: var(--ink); }
+  .next-dose .nd-note { font-size: 12.5px; color: var(--muted); line-height: 1.6; border-top: 1px solid var(--border); padding-top: 12px; }
+
+  /* --- Clinical question --- */
+  .clinical-q {
+    border-left: 3px solid var(--posterior);
+    background: #FFFBF5;
+    border-radius: 0 12px 12px 0;
+    padding: 16px 20px;
+    margin: 24px 0 0;
+  }
+  .clinical-q .tag {
+    font-size: 11px; font-weight: 700; letter-spacing: 0.1em; text-transform: uppercase;
+    color: var(--posterior); margin-bottom: 6px;
+  }
+  .clinical-q p { font-size: 14.5px; line-height: 1.6; margin: 0; color: var(--ink); }
+
+  /* --- Section headers for content below the tool --- */
+  .content-section { margin-top: 40px; }
+  .content-section .tag {
+    font-size: 11px; font-weight: 700; letter-spacing: 0.1em; text-transform: uppercase;
+    color: var(--accent); margin-bottom: 14px;
+  }
+
+  /* --- Teaching points --- */
+  .teaching-points { display: flex; flex-direction: column; gap: 12px; }
+  .tp-card {
+    background: var(--card); border: 1px solid var(--border); border-radius: 12px;
+    padding: 16px 18px;
+  }
+  .tp-card .tp-title { font-family: 'Newsreader', serif; font-size: 16.5px; font-weight: 600; margin: 0 0 6px; color: var(--ink); }
+  .tp-card p { font-size: 13.5px; line-height: 1.6; color: var(--muted); margin: 0; }
+
+  /* --- Clinical pearl --- */
+  .pearl {
+    background: #F0F9F7; border: 1px solid #CDE8E2; border-radius: 12px;
+    padding: 16px 20px; margin-top: 32px;
+  }
+  .pearl .tag {
+    font-size: 11px; font-weight: 700; letter-spacing: 0.1em; text-transform: uppercase;
+    color: var(--accent); margin-bottom: 6px;
+  }
+  .pearl p { font-size: 14.5px; line-height: 1.6; margin: 0; color: var(--ink); }
+
+  /* --- References --- */
+  .references { border-top: 1px solid var(--border); padding-top: 18px; margin-top: 32px; }
+  .references .tag {
+    font-size: 11px; font-weight: 700; letter-spacing: 0.1em; text-transform: uppercase;
+    color: var(--muted); margin-bottom: 10px;
+  }
+  .references ol { margin: 0; padding-left: 18px; }
+  .references li { font-size: 12.5px; line-height: 1.7; color: var(--muted); margin-bottom: 6px; }
+  .references li a { color: var(--ink); }
+  .references li a:hover { color: var(--accent); }
 </style>
 </head>
 <body>
 <div class="wrap">
   <div class="eyebrow">Bayesian Forecasting · Prior vs. Posterior</div>
   <h1>Bayesian vs. Population Vancomycin Dosing</h1>
-  <p class="subtitle">Starts from the same population PK prior as the AUC24 calculator, then updates it with an observed drug level using MAP (maximum a posteriori) estimation — the core mechanism behind individualized Bayesian dosing software.</p>
+  <p class="subtitle">This tool compares two ways to predict how a patient clears vancomycin: a <b>population estimate</b> based on their age, weight, and kidney function, and a <b>personalized estimate</b> that also factors in an actual measured drug level. Enter a level below to see how much it shifts the prediction — and what that means for the next dose.</p>
+
+  <div class="clinical-q">
+    <div class="tag">Clinical question</div>
+    <p>A patient's trough comes back higher than the population model predicted. Do you trust the population estimate or the measured level — and by how much should each one move the next dose?</p>
+  </div>
 
   <div class="grid">
     <div class="card">
@@ -150,8 +223,42 @@
           <div class="legend-item"><span class="swatch dot" style="background:#B45309;"></span>Observed level</div>
         </div>
       </div>
-      <p class="disclaimer">Single-parameter MAP update on clearance only (Vd fixed at population estimate), log-normal prior (30% CV), 20% proportional residual error. Simplified for illustration — production Bayesian dosing software (e.g. InsightRX Nova/Apollo) uses richer covariate models, multi-parameter posteriors, and validated priors. Not for clinical use.</p>
+      <p class="disclaimer">Single-parameter MAP update on clearance only (Vd fixed at population estimate), log-normal prior (30% CV), 20% proportional residual error. Simplified for illustration — production Bayesian dosing software uses richer covariate models, multi-parameter posteriors, and validated priors. Not for clinical use.</p>
     </div>
+  </div>
+
+  <div class="next-dose" id="nextDose"></div>
+
+  <div class="content-section">
+    <div class="tag">Teaching points</div>
+    <div class="teaching-points">
+      <div class="tp-card">
+        <p class="tp-title">1. Why the prior exists at all</p>
+        <p>Population PK gives a reasonable starting clearance before any levels are drawn, built from age, weight, sex, and renal function via Cockcroft-Gault. It's the best guess available at the moment the first dose is ordered — not a final answer.</p>
+      </div>
+      <div class="tp-card">
+        <p class="tp-title">2. What the Bayesian update actually does</p>
+        <p>MAP estimation weighs the observed level against how confident the prior already was. A level that falls close to what the population model predicted barely moves the posterior; a level far outside that range shifts the estimate further, because it's more informative about this specific patient.</p>
+      </div>
+      <div class="tp-card">
+        <p class="tp-title">3. Where this simplification departs from real software</p>
+        <p>This tool updates a single parameter — clearance — while holding volume of distribution fixed at the population estimate, to keep the math visible. Production Bayesian dosing software builds on this same core idea but updates multiple parameters jointly, draws on richer covariate models, and uses priors validated against large patient datasets.</p>
+      </div>
+    </div>
+  </div>
+
+  <div class="pearl">
+    <div class="tag">Clinical pearl</div>
+    <p>A level drawn during the distribution phase (too soon after infusion ends) will read artificially high and pull the posterior in the wrong direction. Getting the sample timing right matters as much as the estimation method itself — garbage in, garbage out applies to Bayesian forecasting too.</p>
+  </div>
+
+  <div class="references">
+    <div class="tag">References</div>
+    <ol>
+      <li>Rybak MJ, Le J, Lodise TP, et al. Therapeutic monitoring of vancomycin for serious methicillin-resistant <em>Staphylococcus aureus</em> infections: a revised consensus guideline. <em>Am J Health Syst Pharm.</em> 2020.</li>
+      <li>Neely MN, Youn G, Jones B, et al. Are vancomycin trough concentrations adequate for optimal dosing? <em>Antimicrob Agents Chemother.</em> 2014.</li>
+      <li>Winter ME. <em>Basic Clinical Pharmacokinetics.</em> 5th ed. Lippincott Williams & Wilkins.</li>
+    </ol>
   </div>
 </div>
 
@@ -238,7 +345,7 @@ function calcAll() {
     }
   }
 
-  return { crcl, vd, clPop, prior, posterior, curvePop, curvePost, tWithin, levelConc };
+  return { crcl, vd, clPop, prior, posterior, curvePop, curvePost, tWithin, levelConc, dose, tau };
 }
 
 function render() {
@@ -271,6 +378,49 @@ function render() {
   }
 
   drawChart(r);
+  renderNextDose(r);
+}
+
+function renderNextDose(r) {
+  const usingPosterior = !!r.posterior;
+  const basis = r.posterior || r.prior;
+  const targetLow = 400, targetHigh = 600, targetMid = 500;
+  const currentAuc = basis.auc24;
+  const inTarget = currentAuc >= targetLow && currentAuc <= targetHigh;
+
+  let recDose = r.dose;
+  if (!inTarget) {
+    recDose = Math.round((r.dose * (targetMid / currentAuc)) / 250) * 250;
+    if (recDose < 250) recDose = 250;
+  }
+
+  const basisLabel = usingPosterior ? 'the personalized estimate (using the measured level)' : 'the population estimate (no level entered yet)';
+  const timeToSteady = (basis.halfLife * 4.5).toFixed(0);
+
+  let headline, sub;
+  if (inTarget) {
+    headline = `Continue ${r.dose} mg every ${r.tau} hr`;
+    sub = `Predicted AUC24 (${currentAuc.toFixed(0)} mg\u00B7h/L) is within the typical 400\u2013600 mg\u00B7h/L target range, based on ${basisLabel}.`;
+  } else {
+    const direction = recDose > r.dose ? 'Increase to' : 'Decrease to';
+    headline = `${direction} ${recDose} mg every ${r.tau} hr`;
+    sub = `Predicted AUC24 (${currentAuc.toFixed(0)} mg\u00B7h/L) is outside the typical 400\u2013600 mg\u00B7h/L target range, based on ${basisLabel}. This keeps the same interval and adjusts the dose to target ~${targetMid} mg\u00B7h/L.`;
+  }
+
+  document.getElementById('nextDose').innerHTML = `
+    <div class="tag">What happens next</div>
+    <p class="headline">${headline}</p>
+    <p class="sub">${sub}</p>
+    <div class="nd-grid">
+      <div class="nd-stat"><div class="k">Current AUC24</div><div class="v">${currentAuc.toFixed(0)} mg\u00B7h/L</div></div>
+      <div class="nd-stat"><div class="k">Target range</div><div class="v">${targetLow}\u2013${targetHigh} mg\u00B7h/L</div></div>
+      <div class="nd-stat"><div class="k">Half-life</div><div class="v">${basis.halfLife.toFixed(1)} hr</div></div>
+      <div class="nd-stat"><div class="k">Time to steady state</div><div class="v">~${timeToSteady} hr</div></div>
+    </div>
+    <p class="nd-note">${usingPosterior
+      ? `If the dose changes, recheck a level once the patient has re-reached steady state (~${timeToSteady} hr from the new regimen) to confirm the new estimate holds.`
+      : `This recommendation is still based on the population estimate. Drawing a level near steady state (~${timeToSteady} hr from the first dose) lets the Bayesian update refine it to this specific patient.`}</p>
+  `;
 }
 
 function drawChart(r) {
