@@ -3,29 +3,40 @@
 <head>
 <meta charset="UTF-8" />
 <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-<title>Bayesian Vancomycin Explorer — Clinical Pharmacokinetics Learning Lab</title>
+<title>Bayesian vs. Population Vancomycin Dosing</title>
 <link rel="preconnect" href="https://fonts.googleapis.com">
 <link href="https://fonts.googleapis.com/css2?family=Newsreader:wght@500;600&family=Inter:wght@400;500;600;700&family=IBM+Plex+Mono:wght@400;500&display=swap" rel="stylesheet">
 <style>
   :root {
-    --ink: #14213D; --muted: #8891A0; --muted-light: #B0B7C3;
-    --border: #EAEDF1; --input-border: #DDE2EA; --accent: #0F766E;
-    --prior: #94A3B8; --posterior: #B45309; --bg: #FAFBFC; --card: #FFFFFF;
+    --ink: #14213D;
+    --muted: #8891A0;
+    --muted-light: #B0B7C3;
+    --border: #EAEDF1;
+    --input-border: #DDE2EA;
+    --accent: #0F766E;
+    --prior: #94A3B8;
+    --posterior: #B45309;
+    --bg: #FAFBFC;
+    --card: #FFFFFF;
   }
   * { box-sizing: border-box; }
-  body { margin: 0; background: var(--bg); color: var(--ink); font-family: 'Inter', sans-serif; }
+  body {
+    margin: 0; background: var(--bg); color: var(--ink);
+    font-family: 'Inter', sans-serif; padding: 32px 20px;
+  }
+  .wrap { max-width: 980px; margin: 0 auto; }
   .nav { display: flex; justify-content: space-between; align-items: center; flex-wrap: wrap; gap: 12px; padding: 20px 32px; border-bottom: 1px solid var(--border); background: #fff; }
   .nav .brand { font-family: 'Newsreader', serif; font-weight: 600; font-size: 16px; color: var(--ink); text-decoration: none; }
   .nav .links { display: flex; gap: 22px; }
   .nav .links a { font-size: 13px; color: var(--muted); text-decoration: none; font-weight: 500; }
   .nav .links a:hover { color: var(--ink); }
-
-  .wrap { max-width: 980px; margin: 0 auto; padding: 32px 20px 80px; }
-  .eyebrow { font-size: 11px; font-weight: 700; letter-spacing: 0.12em; color: var(--posterior); text-transform: uppercase; margin-bottom: 6px; }
-  h1 { font-family: 'Newsreader', serif; font-size: 32px; font-weight: 600; margin: 0; letter-spacing: -0.01em; }
+  .eyebrow {
+    font-size: 11px; font-weight: 700; letter-spacing: 0.12em;
+    color: var(--posterior); text-transform: uppercase; margin-bottom: 6px;
+  }
+  h1 { font-family: 'Newsreader', serif; font-size: 34px; font-weight: 600; margin: 0; letter-spacing: -0.01em; }
   .subtitle { font-size: 13.5px; color: var(--muted); margin-top: 8px; max-width: 620px; line-height: 1.5; }
-
-  .grid { display: grid; grid-template-columns: minmax(260px, 320px) 1fr; gap: 24px; margin-top: 24px; }
+  .grid { display: grid; grid-template-columns: minmax(260px, 320px) 1fr; gap: 24px; margin-top: 28px; }
   @media (max-width: 760px) { .grid { grid-template-columns: 1fr; } }
   .card { background: var(--card); border: 1px solid var(--border); border-radius: 14px; padding: 22px; }
   .section-label { font-size: 12px; font-weight: 700; color: var(--ink); margin-bottom: 16px; letter-spacing: 0.02em; }
@@ -139,9 +150,8 @@
   <nav class="nav">
     <a href="index.html" class="brand">Clinical Pharmacokinetics Learning Lab</a>
     <div class="links">
-      <a href="vancomycin-explorer.html">Vancomycin</a>
-      <a href="aminoglycoside-explorer.html">Aminoglycoside</a>
-      <a href="case-explorer.html">Case Explorer</a>
+      <a href="index.html">Home</a>
+      <a href="aminoglycoside-dosing.html">Aminoglycoside</a>
       <a href="about.html">About</a>
       <a href="references.html">References</a>
       <a href="disclaimer.html">Disclaimer</a>

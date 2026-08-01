@@ -3,53 +3,18 @@
 <head>
 <meta charset="UTF-8" />
 <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-<title>Extended-Interval Aminoglycoside Explorer — Clinical Pharmacokinetics Learning Lab</title>
+<title>Aminoglycoside Extended-Interval Dosing</title>
 <link rel="preconnect" href="https://fonts.googleapis.com">
 <link href="https://fonts.googleapis.com/css2?family=Newsreader:wght@500;600&family=Inter:wght@400;500;600;700&family=IBM+Plex+Mono:wght@400;500&display=swap" rel="stylesheet">
+<link rel="stylesheet" href="styles.css" />
 <style>
   :root {
-    --ink: #14213D;
-    --muted: #8891A0;
-    --muted-light: #B0B7C3;
-    --border: #EAEDF1;
-    --input-border: #DDE2EA;
-    --accent: #6D28D9;
-    --q24: #0F766E;
-    --q36: #B45309;
-    --q48: #B91C1C;
-    --bg: #FAFBFC;
-    --card: #FFFFFF;
+    --accent: var(--purple);
+    --q24: var(--teal);
+    --q36: var(--amber);
+    --q48: var(--red);
   }
-  * { box-sizing: border-box; }
-  body { margin: 0; background: var(--bg); color: var(--ink); font-family: 'Inter', sans-serif; }
-  .nav { display: flex; justify-content: space-between; align-items: center; flex-wrap: wrap; gap: 12px; padding: 20px 32px; border-bottom: 1px solid var(--border); background: #fff; }
-  .nav .brand { font-family: 'Newsreader', serif; font-weight: 600; font-size: 16px; color: var(--ink); text-decoration: none; }
-  .nav .links { display: flex; gap: 22px; }
-  .nav .links a { font-size: 13px; color: var(--muted); text-decoration: none; font-weight: 500; }
-  .nav .links a:hover { color: var(--ink); }
-  .page-body { padding: 32px 20px 80px; }
-  .wrap { max-width: 980px; margin: 0 auto; }
-  .eyebrow { font-size: 11px; font-weight: 700; letter-spacing: 0.12em; color: var(--accent); text-transform: uppercase; margin-bottom: 6px; }
-  h1 { font-family: 'Newsreader', serif; font-size: 34px; font-weight: 600; margin: 0; letter-spacing: -0.01em; }
   .subtitle { font-size: 13.5px; color: var(--muted); margin-top: 8px; max-width: 620px; line-height: 1.5; }
-  .grid { display: grid; grid-template-columns: minmax(260px, 320px) 1fr; gap: 24px; margin-top: 28px; }
-  @media (max-width: 760px) { .grid { grid-template-columns: 1fr; } }
-  .card { background: var(--card); border: 1px solid var(--border); border-radius: 14px; padding: 22px; }
-  .section-label { font-size: 12px; font-weight: 700; color: var(--ink); margin-bottom: 16px; letter-spacing: 0.02em; }
-  .field-grid { display: grid; grid-template-columns: 1fr 1fr; gap: 14px; margin-bottom: 20px; }
-  label.field { display: flex; flex-direction: column; gap: 6px; font-size: 12.5px; }
-  label.field span.field-label { letter-spacing: 0.02em; text-transform: uppercase; font-size: 11px; font-weight: 600; color: var(--muted); }
-  .input-row { display: flex; align-items: baseline; gap: 6px; }
-  input[type=number], select {
-    width: 100%; font-family: 'IBM Plex Mono', monospace; font-size: 15px; color: var(--ink);
-    background: #fff; border: 1px solid var(--input-border); border-radius: 8px; padding: 9px 10px; outline: none;
-  }
-  input[type=number]:focus, select:focus { border-color: var(--accent); }
-  .unit { font-size: 12px; color: var(--muted); min-width: 30px; }
-  .derived { border-top: 1px solid var(--border); padding-top: 16px; display: flex; flex-direction: column; gap: 9px; }
-  .derived-row { display: flex; justify-content: space-between; font-size: 12.5px; }
-  .derived-row .k { color: var(--muted); }
-  .derived-row .v { font-family: 'IBM Plex Mono', monospace; color: var(--ink); }
 
   .stats-row { display: grid; grid-template-columns: repeat(2, 1fr); gap: 12px; }
   .stat { background: var(--card); border: 1px solid var(--border); border-radius: 14px; padding: 16px 18px; }
@@ -57,19 +22,10 @@
   .stat .value { font-family: 'IBM Plex Mono', monospace; font-size: 22px; color: var(--ink); }
   .stat .value .unit-sm { font-size: 13px; color: var(--muted); }
 
-  .zone-banner {
-    border-radius: 14px; padding: 18px 22px; margin-top: 12px; border: 1px solid;
-  }
+  .zone-banner { border-radius: 14px; padding: 18px 22px; margin-top: 12px; border: 1px solid; }
   .zone-label { font-size: 11px; font-weight: 700; letter-spacing: 0.08em; text-transform: uppercase; margin-bottom: 4px; }
   .zone-value { font-family: 'Newsreader', serif; font-size: 26px; font-weight: 600; color: var(--ink); }
   .zone-sub { font-size: 12.5px; color: var(--muted); margin-top: 4px; }
-
-  .chart-card { background: var(--card); border: 1px solid var(--border); border-radius: 14px; padding: 20px; margin-top: 16px; }
-  .legend { display: flex; gap: 16px; margin-top: 10px; font-size: 11.5px; color: var(--muted); flex-wrap: wrap; }
-  .legend-item { display: flex; align-items: center; gap: 6px; }
-  .swatch { width: 16px; height: 2px; display: inline-block; }
-  .swatch.dot { width: 8px; height: 8px; border-radius: 50%; }
-  .disclaimer { font-size: 11.5px; color: var(--muted-light); line-height: 1.5; margin: 14px 4px 0; }
 
   .interp-card { background: #FAF8FF; border: 1px solid #E3D9F8; border-radius: 14px; padding: 20px 22px; margin-top: 16px; }
   .interp-body p { font-size: 13px; line-height: 1.65; color: var(--ink); margin: 0 0 10px; }
@@ -77,88 +33,25 @@
   .interp-body ul { margin: 0 0 10px; padding-left: 18px; }
   .interp-body li { font-size: 13px; line-height: 1.6; color: var(--ink); margin-bottom: 4px; }
   .interp-flag { display: inline-block; font-size: 10.5px; font-weight: 700; text-transform: uppercase; letter-spacing: 0.05em; padding: 2px 8px; border-radius: 5px; margin-right: 6px; }
-  .interp-flag.watch { background: #FEF6E7; color: #B45309; }
-  .interp-flag.stop { background: #FEF2F2; color: #B91C1C; }
-  .interp-flag.ok { background: #ECFDF9; color: #0F766E; }
+  .interp-flag.watch { background: #FEF6E7; color: var(--amber); }
+  .interp-flag.stop { background: #FEF2F2; color: var(--red); }
+  .interp-flag.ok { background: #ECFDF9; color: var(--teal); }
 
-  .clinical-q {
-    border-left: 3px solid var(--accent);
-    background: #FAF8FF;
-    border-radius: 0 12px 12px 0;
-    padding: 16px 20px;
-    margin: 24px 0 0;
-  }
-  .clinical-q .tag {
-    font-size: 11px; font-weight: 700; letter-spacing: 0.1em; text-transform: uppercase;
-    color: var(--accent); margin-bottom: 6px;
-  }
-  .clinical-q p { font-size: 14.5px; line-height: 1.6; margin: 0; color: var(--ink); }
-
-  .next-dose {
-    background: var(--card); border: 1px solid var(--border); border-left: 4px solid var(--accent);
-    border-radius: 12px; padding: 20px 24px; margin-top: 24px;
-  }
-  .next-dose .tag {
-    font-size: 11px; font-weight: 700; letter-spacing: 0.1em; text-transform: uppercase;
-    color: var(--accent); margin-bottom: 10px;
-  }
-  .next-dose .headline { font-family: 'Newsreader', serif; font-size: 20px; font-weight: 600; color: var(--ink); margin: 0 0 6px; }
-  .next-dose .sub { font-size: 13px; color: var(--muted); line-height: 1.6; margin: 0 0 14px; }
-  .next-dose .nd-grid { display: grid; grid-template-columns: repeat(auto-fit, minmax(140px, 1fr)); gap: 14px; margin-bottom: 12px; }
-  .next-dose .nd-stat .k { font-size: 11px; text-transform: uppercase; letter-spacing: 0.04em; color: var(--muted); margin-bottom: 3px; }
-  .next-dose .nd-stat .v { font-family: 'IBM Plex Mono', monospace; font-size: 16px; color: var(--ink); }
-  .next-dose .nd-note { font-size: 12.5px; color: var(--muted); line-height: 1.6; border-top: 1px solid var(--border); padding-top: 12px; }
-
-  .content-section { margin-top: 40px; }
-  .content-section .tag {
-    font-size: 11px; font-weight: 700; letter-spacing: 0.1em; text-transform: uppercase;
-    color: var(--accent); margin-bottom: 14px;
-  }
-
-  .teaching-points { display: flex; flex-direction: column; gap: 12px; }
-  .tp-card {
-    background: var(--card); border: 1px solid var(--border); border-radius: 12px;
-    padding: 16px 18px;
-  }
-  .tp-card .tp-title { font-family: 'Newsreader', serif; font-size: 16.5px; font-weight: 600; margin: 0 0 6px; color: var(--ink); }
-  .tp-card p { font-size: 13.5px; line-height: 1.6; color: var(--muted); margin: 0; }
-
-  .pearl {
-    background: #F0F9F7; border: 1px solid #CDE8E2; border-radius: 12px;
-    padding: 16px 20px; margin-top: 32px;
-  }
-  .pearl .tag {
-    font-size: 11px; font-weight: 700; letter-spacing: 0.1em; text-transform: uppercase;
-    color: #0F766E; margin-bottom: 6px;
-  }
-  .pearl p { font-size: 14.5px; line-height: 1.6; margin: 0; color: var(--ink); }
-
-   /* --- References --- */
-  .references { border-top: 1px solid var(--border); padding-top: 18px; margin-top: 32px; }
-  .references .tag {
-    font-size: 11px; font-weight: 700; letter-spacing: 0.1em; text-transform: uppercase;
-    color: var(--muted); margin-bottom: 10px;
-  }
-  .references ol { margin: 0; padding-left: 18px; }
-  .references li { font-size: 12.5px; line-height: 1.7; color: var(--muted); margin-bottom: 6px; }
-  .references li a { color: var(--ink); }
-  .references li a:hover { color: var(--accent); }
+  .clinical-q { border-left: 3px solid var(--accent); background: #FAF8FF; }
 </style>
 </head>
 <body>
-  <nav class="nav">
-    <a href="index.html" class="brand">Clinical Pharmacokinetics Learning Lab</a>
-    <div class="links">
-      <a href="vancomycin-explorer.html">Vancomycin</a>
-      <a href="aminoglycoside-explorer.html">Aminoglycoside</a>
-      <a href="case-explorer.html">Case Explorer</a>
-      <a href="about.html">About</a>
-      <a href="references.html">References</a>
-      <a href="disclaimer.html">Disclaimer</a>
-    </div>
-  </nav>
-
-<div class="page-body">
+<nav class="nav">
+  <a class="brand" href="index.html">Clinical Pharmacokinetics Learning Lab</a>
+  <div class="links">
+    <a href="index.html">Home</a>
+    <a href="bayesian-dosing.html">Vancomycin</a>
+    <a href="aminoglycoside-dosing.html" class="active">Aminoglycoside</a>
+    <a href="about.html">About</a>
+    <a href="references.html">References</a>
+    <a href="disclaimer.html">Disclaimer</a>
+  </div>
+</nav>
 <div class="wrap">
   <div class="eyebrow">Extended-Interval Aminoglycoside Dosing</div>
   <h1>Gentamicin / Tobramycin Interval Calculator</h1>
@@ -273,7 +166,6 @@
       <li>Winter ME. <em>Basic Clinical Pharmacokinetics.</em> 5th ed. Lippincott Williams & Wilkins.</li>
     </ol>
   </div>
-</div>
 </div>
 
 <script>

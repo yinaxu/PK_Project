@@ -3,48 +3,20 @@
 <head>
 <meta charset="UTF-8" />
 <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-<title>Bayesian Vancomycin Explorer — Clinical Pharmacokinetics Learning Lab</title>
+<title>Bayesian vs. Population Vancomycin Dosing</title>
 <link rel="preconnect" href="https://fonts.googleapis.com">
 <link href="https://fonts.googleapis.com/css2?family=Newsreader:wght@500;600&family=Inter:wght@400;500;600;700&family=IBM+Plex+Mono:wght@400;500&display=swap" rel="stylesheet">
+<link rel="stylesheet" href="styles.css" />
 <style>
   :root {
-    --ink: #14213D; --muted: #8891A0; --muted-light: #B0B7C3;
-    --border: #EAEDF1; --input-border: #DDE2EA; --accent: #0F766E;
-    --prior: #94A3B8; --posterior: #B45309; --bg: #FAFBFC; --card: #FFFFFF;
+    --accent: var(--teal);
+    --prior: var(--slate);
+    --posterior: var(--amber);
   }
-  * { box-sizing: border-box; }
-  body { margin: 0; background: var(--bg); color: var(--ink); font-family: 'Inter', sans-serif; }
-  .nav { display: flex; justify-content: space-between; align-items: center; flex-wrap: wrap; gap: 12px; padding: 20px 32px; border-bottom: 1px solid var(--border); background: #fff; }
-  .nav .brand { font-family: 'Newsreader', serif; font-weight: 600; font-size: 16px; color: var(--ink); text-decoration: none; }
-  .nav .links { display: flex; gap: 22px; }
-  .nav .links a { font-size: 13px; color: var(--muted); text-decoration: none; font-weight: 500; }
-  .nav .links a:hover { color: var(--ink); }
-
-  .wrap { max-width: 980px; margin: 0 auto; padding: 32px 20px 80px; }
-  .eyebrow { font-size: 11px; font-weight: 700; letter-spacing: 0.12em; color: var(--posterior); text-transform: uppercase; margin-bottom: 6px; }
-  h1 { font-family: 'Newsreader', serif; font-size: 32px; font-weight: 600; margin: 0; letter-spacing: -0.01em; }
+  .eyebrow { color: var(--posterior); }
   .subtitle { font-size: 13.5px; color: var(--muted); margin-top: 8px; max-width: 620px; line-height: 1.5; }
-
-  .grid { display: grid; grid-template-columns: minmax(260px, 320px) 1fr; gap: 24px; margin-top: 24px; }
-  @media (max-width: 760px) { .grid { grid-template-columns: 1fr; } }
-  .card { background: var(--card); border: 1px solid var(--border); border-radius: 14px; padding: 22px; }
-  .section-label { font-size: 12px; font-weight: 700; color: var(--ink); margin-bottom: 16px; letter-spacing: 0.02em; }
   .section-label.obs { color: var(--posterior); display: flex; align-items: center; gap: 6px; }
-  .field-grid { display: grid; grid-template-columns: 1fr 1fr; gap: 14px; margin-bottom: 20px; }
-  label.field { display: flex; flex-direction: column; gap: 6px; font-size: 12.5px; }
-  label.field span.field-label { letter-spacing: 0.02em; text-transform: uppercase; font-size: 11px; font-weight: 600; color: var(--muted); }
-  .input-row { display: flex; align-items: baseline; gap: 6px; }
-  input[type=number], select {
-    width: 100%; font-family: 'IBM Plex Mono', monospace; font-size: 15px; color: var(--ink);
-    background: #fff; border: 1px solid var(--input-border); border-radius: 8px; padding: 9px 10px; outline: none;
-  }
-  input[type=number]:focus, select:focus { border-color: var(--accent); }
-  .unit { font-size: 12px; color: var(--muted); min-width: 30px; }
   .obs-card { border: 1px solid #F2D9B8; background: #FFFBF5; border-radius: 12px; padding: 16px; margin-bottom: 20px; }
-  .derived { border-top: 1px solid var(--border); padding-top: 16px; display: flex; flex-direction: column; gap: 9px; }
-  .derived-row { display: flex; justify-content: space-between; font-size: 12.5px; }
-  .derived-row .k { color: var(--muted); }
-  .derived-row .v { font-family: 'IBM Plex Mono', monospace; color: var(--ink); }
 
   .compare-row { display: grid; grid-template-columns: 1fr 1fr; gap: 12px; }
   .compare-card { background: var(--card); border: 1px solid var(--border); border-radius: 14px; padding: 16px 18px; }
@@ -58,90 +30,18 @@
   .compare-metric .v { font-family: 'IBM Plex Mono', monospace; color: var(--ink); font-weight: 500; }
   .compare-metric .v.big { font-size: 17px; }
 
-  .chart-card { background: var(--card); border: 1px solid var(--border); border-radius: 14px; padding: 20px; margin-top: 16px; }
-  .legend { display: flex; gap: 18px; margin-top: 10px; font-size: 11.5px; color: var(--muted); }
-  .legend-item { display: flex; align-items: center; gap: 6px; }
-  .swatch { width: 16px; height: 2px; display: inline-block; }
-  .swatch.dot { width: 8px; height: 8px; border-radius: 50%; }
-  .disclaimer { font-size: 11.5px; color: var(--muted-light); line-height: 1.5; margin: 14px 4px 0; }
   .hint { font-size: 11.5px; color: var(--posterior); margin-top: -8px; margin-bottom: 16px; }
-
-  /* --- Next dose recommendation --- */
-  .next-dose {
-    background: var(--card); border: 1px solid var(--border); border-left: 4px solid var(--accent);
-    border-radius: 12px; padding: 20px 24px; margin-top: 24px;
-  }
-  .next-dose .tag {
-    font-size: 11px; font-weight: 700; letter-spacing: 0.1em; text-transform: uppercase;
-    color: var(--accent); margin-bottom: 10px;
-  }
-  .next-dose .headline { font-family: 'Newsreader', serif; font-size: 20px; font-weight: 600; color: var(--ink); margin: 0 0 6px; }
-  .next-dose .sub { font-size: 13px; color: var(--muted); line-height: 1.6; margin: 0 0 14px; }
-  .next-dose .nd-grid { display: grid; grid-template-columns: repeat(auto-fit, minmax(140px, 1fr)); gap: 14px; margin-bottom: 12px; }
-  .next-dose .nd-stat .k { font-size: 11px; text-transform: uppercase; letter-spacing: 0.04em; color: var(--muted); margin-bottom: 3px; }
-  .next-dose .nd-stat .v { font-family: 'IBM Plex Mono', monospace; font-size: 16px; color: var(--ink); }
-  .next-dose .nd-note { font-size: 12.5px; color: var(--muted); line-height: 1.6; border-top: 1px solid var(--border); padding-top: 12px; }
-
-  /* --- Clinical question --- */
-  .clinical-q {
-    border-left: 3px solid var(--posterior);
-    background: #FFFBF5;
-    border-radius: 0 12px 12px 0;
-    padding: 16px 20px;
-    margin: 24px 0 0;
-  }
-  .clinical-q .tag {
-    font-size: 11px; font-weight: 700; letter-spacing: 0.1em; text-transform: uppercase;
-    color: var(--posterior); margin-bottom: 6px;
-  }
-  .clinical-q p { font-size: 14.5px; line-height: 1.6; margin: 0; color: var(--ink); }
-
-  /* --- Section headers for content below the tool --- */
-  .content-section { margin-top: 40px; }
-  .content-section .tag {
-    font-size: 11px; font-weight: 700; letter-spacing: 0.1em; text-transform: uppercase;
-    color: var(--accent); margin-bottom: 14px;
-  }
-
-  /* --- Teaching points --- */
-  .teaching-points { display: flex; flex-direction: column; gap: 12px; }
-  .tp-card {
-    background: var(--card); border: 1px solid var(--border); border-radius: 12px;
-    padding: 16px 18px;
-  }
-  .tp-card .tp-title { font-family: 'Newsreader', serif; font-size: 16.5px; font-weight: 600; margin: 0 0 6px; color: var(--ink); }
-  .tp-card p { font-size: 13.5px; line-height: 1.6; color: var(--muted); margin: 0; }
-
-  /* --- Clinical pearl --- */
-  .pearl {
-    background: #F0F9F7; border: 1px solid #CDE8E2; border-radius: 12px;
-    padding: 16px 20px; margin-top: 32px;
-  }
-  .pearl .tag {
-    font-size: 11px; font-weight: 700; letter-spacing: 0.1em; text-transform: uppercase;
-    color: var(--accent); margin-bottom: 6px;
-  }
-  .pearl p { font-size: 14.5px; line-height: 1.6; margin: 0; color: var(--ink); }
-
-  /* --- References --- */
-  .references { border-top: 1px solid var(--border); padding-top: 18px; margin-top: 32px; }
-  .references .tag {
-    font-size: 11px; font-weight: 700; letter-spacing: 0.1em; text-transform: uppercase;
-    color: var(--muted); margin-bottom: 10px;
-  }
-  .references ol { margin: 0; padding-left: 18px; }
-  .references li { font-size: 12.5px; line-height: 1.7; color: var(--muted); margin-bottom: 6px; }
-  .references li a { color: var(--ink); }
-  .references li a:hover { color: var(--accent); }
+  .clinical-q { border-left: 3px solid var(--posterior); background: #FFFBF5; }
+  .clinical-q .tag { color: var(--posterior); }
 </style>
 </head>
 <body>
   <nav class="nav">
     <a href="index.html" class="brand">Clinical Pharmacokinetics Learning Lab</a>
     <div class="links">
-      <a href="vancomycin-explorer.html">Vancomycin</a>
-      <a href="aminoglycoside-explorer.html">Aminoglycoside</a>
-      <a href="case-explorer.html">Case Explorer</a>
+      <a href="index.html">Home</a>
+      <a href="bayesian-dosing.html" class="active">Vancomycin</a>
+      <a href="aminoglycoside-dosing.html">Aminoglycoside</a>
       <a href="about.html">About</a>
       <a href="references.html">References</a>
       <a href="disclaimer.html">Disclaimer</a>

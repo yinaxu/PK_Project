@@ -1,0 +1,93 @@
+<!doctype html>
+<html lang="en">
+<head>
+<meta charset="UTF-8" />
+<meta name="viewport" content="width=device-width, initial-scale=1.0" />
+<title>Clinical Pharmacokinetics Learning Lab</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link href="https://fonts.googleapis.com/css2?family=Newsreader:wght@500;600&family=Inter:wght@400;500;600;700&family=IBM+Plex+Mono:wght@400;500&display=swap" rel="stylesheet">
+<link rel="stylesheet" href="styles.css" />
+<style>
+  .hero { max-width: 760px; margin: 0 auto; padding: 90px 20px 46px; text-align: center; }
+  .badge { display: inline-block; font-size: 11px; font-weight: 700; letter-spacing: 0.14em; color: var(--teal); text-transform: uppercase; margin-bottom: 16px; }
+  .hero h1 { font-size: 44px; margin: 0; line-height: 1.15; }
+  .hero p { font-size: 15.5px; color: var(--muted); max-width: 660px; margin: 18px auto 24px; line-height: 1.7; }
+
+  .features-list { display: flex; justify-content: center; gap: 24px; margin-top: 12px; flex-wrap: wrap; }
+  .features-list div { display: flex; align-items: center; gap: 8px; font-size: 13px; color: var(--muted); }
+  .features-list span { color: var(--teal); font-weight: 700; }
+
+  .tools-section { max-width: 1040px; margin: 0 auto; padding: 24px 20px 70px; }
+  .section-title { font-family: 'Newsreader', serif; font-size: 26px; font-weight: 600; margin-bottom: 24px; text-align: center; }
+  .tools-grid { display: grid; grid-template-columns: repeat(2, minmax(0, 1fr)); gap: 20px; }
+  .tool-card { background: var(--card); border: 1px solid var(--border); border-radius: 16px; padding: 24px 24px 20px; display: flex; flex-direction: column; justify-content: space-between; gap: 18px; box-shadow: 0 1px 2px rgba(20, 33, 61, 0.04); }
+  .card-header { display: flex; gap: 14px; align-items: flex-start; }
+  .card-icon { font-size: 26px; }
+  .card-title { font-family: 'Newsreader', serif; font-size: 20px; font-weight: 600; margin: 2px 0 8px; }
+  .card-description { font-size: 13.5px; color: var(--muted); line-height: 1.6; }
+  .btn { align-self: flex-start; display: inline-block; background: var(--ink); color: #fff; text-decoration: none; font-size: 13px; font-weight: 600; padding: 10px 18px; border-radius: 9px; }
+  .btn:hover { background: #0B1730; }
+  @media (max-width: 760px) { .tools-grid { grid-template-columns: 1fr; } }
+</style>
+</head>
+<body>
+  <nav class="nav">
+    <a href="index.html" class="brand">Clinical Pharmacokinetics Learning Lab</a>
+    <div class="links">
+      <a href="index.html" class="active">Home</a>
+      <a href="bayesian-dosing.html">Vancomycin</a>
+      <a href="aminoglycoside-dosing.html">Aminoglycoside</a>
+      <a href="about.html">About</a>
+      <a href="references.html">References</a>
+      <a href="disclaimer.html">Disclaimer</a>
+    </div>
+  </nav>
+
+  <div class="hero">
+    <div class="badge">Clinical Pharmacokinetics Learning Lab</div>
+    <h1>Interactive tools for learning precision dosing and pharmacokinetic modeling</h1>
+    <p>Exploring model-informed dosing and therapeutic drug monitoring through visual, interactive tools — bringing population priors, Bayesian updating, and clinical calculations out of the “black box.”</p>
+
+    <div class="features-list">
+      <div><span>✓</span> Bayesian Vancomycin Explorer</div>
+      <div><span>✓</span> Extended-Interval Aminoglycoside Explorer</div>
+    </div>
+  </div>
+
+  <div class="tools-section">
+    <div class="section-title">Interactive Educational Tools</div>
+
+    <div class="tools-grid">
+      <div class="tool-card">
+        <div class="card-header">
+          <div class="card-icon">🧪</div>
+          <div>
+            <div class="card-title">Bayesian Vancomycin Explorer</div>
+            <div class="card-description">
+              Demonstrates how Bayesian estimation individualizes vancomycin dosing by reconciling population PK models with patient-specific drug levels and AUC target calculations (400–600 mg·h/L).
+            </div>
+          </div>
+        </div>
+        <a href="bayesian-dosing.html" class="btn">Launch Demo →</a>
+      </div>
+
+      <div class="tool-card">
+        <div class="card-header">
+          <div class="card-icon">💉</div>
+          <div>
+            <div class="card-title">Extended-Interval Aminoglycoside Explorer</div>
+            <div class="card-description">
+              Explore Hartford Nomogram dosing and interval selection through dynamic concentration-time curves and visual clinical interpretation.
+            </div>
+          </div>
+        </div>
+        <a href="aminoglycoside-dosing.html" class="btn">Launch Demo →</a>
+      </div>
+    </div>
+  </div>
+
+  <footer>
+    Built for education, not clinical use — see the <a href="disclaimer.html">disclaimer</a>. · <a href="about.html">About this project</a> · <a href="references.html">References</a>
+  </footer>
+</body>
+</html>

@@ -3,7 +3,7 @@
 <head>
 <meta charset="UTF-8" />
 <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-<title>Extended-Interval Aminoglycoside Explorer — Clinical Pharmacokinetics Learning Lab</title>
+<title>Aminoglycoside Extended-Interval Dosing</title>
 <link rel="preconnect" href="https://fonts.googleapis.com">
 <link href="https://fonts.googleapis.com/css2?family=Newsreader:wght@500;600&family=Inter:wght@400;500;600;700&family=IBM+Plex+Mono:wght@400;500&display=swap" rel="stylesheet">
 <style>
@@ -21,14 +21,18 @@
     --card: #FFFFFF;
   }
   * { box-sizing: border-box; }
-  body { margin: 0; background: var(--bg); color: var(--ink); font-family: 'Inter', sans-serif; }
-  .nav { display: flex; justify-content: space-between; align-items: center; flex-wrap: wrap; gap: 12px; padding: 20px 32px; border-bottom: 1px solid var(--border); background: #fff; }
-  .nav .brand { font-family: 'Newsreader', serif; font-weight: 600; font-size: 16px; color: var(--ink); text-decoration: none; }
-  .nav .links { display: flex; gap: 22px; }
-  .nav .links a { font-size: 13px; color: var(--muted); text-decoration: none; font-weight: 500; }
-  .nav .links a:hover { color: var(--ink); }
-  .page-body { padding: 32px 20px 80px; }
+  body { margin: 0; background: var(--bg); color: var(--ink); font-family: 'Inter', sans-serif; padding: 32px 20px; }
   .wrap { max-width: 980px; margin: 0 auto; }
+  .top-nav {
+    display: flex; justify-content: space-between; align-items: center; gap: 12px;
+    padding: 12px 16px; margin: 0 auto 20px; max-width: 980px;
+    background: #fff; border: 1px solid var(--border); border-radius: 12px;
+    box-shadow: 0 1px 2px rgba(20, 33, 61, 0.04);
+  }
+  .top-nav .brand { font-family: 'Newsreader', serif; font-size: 15px; font-weight: 600; color: var(--ink); text-decoration: none; }
+  .top-nav .links { display: flex; gap: 12px; flex-wrap: wrap; }
+  .top-nav .links a { font-size: 13px; color: var(--muted); text-decoration: none; font-weight: 600; }
+  .top-nav .links a:hover { color: var(--ink); }
   .eyebrow { font-size: 11px; font-weight: 700; letter-spacing: 0.12em; color: var(--accent); text-transform: uppercase; margin-bottom: 6px; }
   h1 { font-family: 'Newsreader', serif; font-size: 34px; font-weight: 600; margin: 0; letter-spacing: -0.01em; }
   .subtitle { font-size: 13.5px; color: var(--muted); margin-top: 8px; max-width: 620px; line-height: 1.5; }
@@ -132,7 +136,7 @@
     color: #0F766E; margin-bottom: 6px;
   }
   .pearl p { font-size: 14.5px; line-height: 1.6; margin: 0; color: var(--ink); }
-
+  
    /* --- References --- */
   .references { border-top: 1px solid var(--border); padding-top: 18px; margin-top: 32px; }
   .references .tag {
@@ -146,19 +150,17 @@
 </style>
 </head>
 <body>
-  <nav class="nav">
-    <a href="index.html" class="brand">Clinical Pharmacokinetics Learning Lab</a>
-    <div class="links">
-      <a href="vancomycin-explorer.html">Vancomycin</a>
-      <a href="aminoglycoside-explorer.html">Aminoglycoside</a>
-      <a href="case-explorer.html">Case Explorer</a>
-      <a href="about.html">About</a>
-      <a href="references.html">References</a>
-      <a href="disclaimer.html">Disclaimer</a>
-    </div>
-  </nav>
-
-<div class="page-body">
+<div class="top-nav">
+  <a class="brand" href="index.html">Clinical Pharmacokinetics Learning Lab</a>
+  <div class="links">
+    <a href="index.html">Home</a>
+    <a href="bayesian-dosing.html">Vancomycin</a>
+    <a href="aminoglycoside-dosing.html">Aminoglycosides</a>
+    <a href="about.html">About</a>
+    <a href="references.html">References</a>
+    <a href="disclaimer.html">Disclaimer</a>
+  </div>
+</div>
 <div class="wrap">
   <div class="eyebrow">Extended-Interval Aminoglycoside Dosing</div>
   <h1>Gentamicin / Tobramycin Interval Calculator</h1>
@@ -273,7 +275,6 @@
       <li>Winter ME. <em>Basic Clinical Pharmacokinetics.</em> 5th ed. Lippincott Williams & Wilkins.</li>
     </ol>
   </div>
-</div>
 </div>
 
 <script>

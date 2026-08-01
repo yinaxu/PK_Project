@@ -1,0 +1,162 @@
+<!doctype html>
+<html lang="en">
+<head>
+<meta charset="UTF-8" />
+<meta name="viewport" content="width=device-width, initial-scale=1.0" />
+<title>Disclaimer | Clinical Pharmacokinetics Learning Lab</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link href="https://fonts.googleapis.com/css2?family=Newsreader:wght@500;600&family=Inter:wght@400;500;600;700&family=IBM+Plex+Mono:wght@400;500&display=swap" rel="stylesheet">
+<style>
+  :root {
+    --ink: #14213D;
+    --muted: #8891A0;
+    --muted-light: #B0B7C3;
+    --border: #EAEDF1;
+    --input-border: #DDE2EA;
+    --accent: #6D28D9;
+    --bg: #FAFBFC;
+    --card: #FFFFFF;
+    --warn-bg: #FEF6E7;
+    --warn-border: #FCD34D;
+    --warn-text: #B45309;
+  }
+  * { box-sizing: border-box; }
+  body { margin: 0; background: var(--bg); color: var(--ink); font-family: 'Inter', sans-serif; padding: 32px 20px; }
+  .wrap { max-width: 820px; margin: 0 auto; }
+  
+  /* Top Navigation System */
+  .top-nav {
+    display: flex; justify-content: space-between; align-items: center; gap: 12px;
+    padding: 12px 16px; margin: 0 auto 28px; max-width: 980px;
+    background: #fff; border: 1px solid var(--border); border-radius: 12px;
+    box-shadow: 0 1px 2px rgba(20, 33, 61, 0.04);
+  }
+  .top-nav .brand { font-family: 'Newsreader', serif; font-size: 15px; font-weight: 600; color: var(--ink); text-decoration: none; }
+  .top-nav .links { display: flex; gap: 12px; flex-wrap: wrap; }
+  .top-nav .links a { font-size: 13px; color: var(--muted); text-decoration: none; font-weight: 600; }
+  .top-nav .links a:hover { color: var(--ink); }
+  
+  /* Header Styles */
+  .eyebrow { font-size: 11px; font-weight: 700; letter-spacing: 0.12em; color: var(--accent); text-transform: uppercase; margin-bottom: 6px; }
+  h1 { font-family: 'Newsreader', serif; font-size: 36px; font-weight: 600; margin: 0; letter-spacing: -0.01em; }
+  .subtitle { font-size: 14.5px; color: var(--muted); margin-top: 8px; max-width: 640px; line-height: 1.6; }
+
+  /* Primary Alert Banner */
+  .alert-banner {
+    background: var(--warn-bg);
+    border: 1px solid var(--warn-border);
+    border-radius: 12px;
+    padding: 18px 22px;
+    margin: 28px 0;
+    display: flex;
+    gap: 14px;
+    align-items: flex-start;
+  }
+  .alert-banner .icon {
+    font-size: 18px;
+    line-height: 1;
+    margin-top: 2px;
+  }
+  .alert-banner p {
+    margin: 0;
+    font-size: 13.5px;
+    line-height: 1.6;
+    color: var(--warn-text);
+    font-weight: 500;
+  }
+
+  /* Disclaimer Content Cards */
+  .disclaimer-card {
+    background: var(--card);
+    border: 1px solid var(--border);
+    border-radius: 14px;
+    padding: 24px 28px;
+    margin-bottom: 20px;
+  }
+  .disclaimer-card h2 {
+    font-family: 'Newsreader', serif;
+    font-size: 20px;
+    font-weight: 600;
+    margin: 0 0 12px;
+    color: var(--ink);
+  }
+  .disclaimer-card p {
+    font-size: 13.5px;
+    line-height: 1.65;
+    color: var(--muted);
+    margin: 0 0 12px;
+  }
+  .disclaimer-card p:last-child { margin-bottom: 0; }
+  
+  .disclaimer-card ul {
+    margin: 8px 0 12px;
+    padding-left: 20px;
+  }
+  .disclaimer-card li {
+    font-size: 13.5px;
+    line-height: 1.6;
+    color: var(--muted);
+    margin-bottom: 6px;
+  }
+
+  /* Footer Note */
+  .footer-note {
+    font-size: 12px;
+    color: var(--muted-light);
+    text-align: center;
+    margin-top: 36px;
+    line-height: 1.5;
+  }
+</style>
+</head>
+<body>
+
+<div class="top-nav">
+  <a class="brand" href="index.html">Clinical Pharmacokinetics Learning Lab</a>
+  <div class="links">
+    <a href="index.html">Home</a>
+    <a href="bayesian-dosing.html">Vancomycin</a>
+    <a href="aminoglycoside-dosing.html">Aminoglycosides</a>
+    <a href="about.html">About</a>
+    <a href="references.html">References</a>
+    <a href="disclaimer.html">Disclaimer</a>
+  </div>
+</div>
+
+<div class="wrap">
+  <div class="eyebrow">Legal & Educational Notice</div>
+  <h1>Terms of Use & Disclaimer</h1>
+  <p class="subtitle">Important information regarding the intended purpose, clinical scope, and mathematical modeling limitations of the tools provided in this interactive learning lab.</p>
+
+  <div class="alert-banner">
+    <div class="icon">⚠️</div>
+    <p><strong>Educational Resource Only:</strong> The interactive calculators on this website are designed strictly for educational, illustrative, and training purposes. They are not cleared clinical medical devices and must not be used to guide direct patient care or clinical decision-making.</p>
+  </div>
+
+  <div class="disclaimer-card">
+    <h2>1. No Medical or Clinical Advice</h2>
+    <p>The information, algorithms, visual curves, and outputs provided by the Clinical Pharmacokinetics Learning Lab do not constitute medical advice, clinical diagnosis, or treatment recommendations. Healthcare professionals using this tool must exercise their independent clinical judgment and verify all doses, dosing intervals, and drug level evaluations against institutional protocols, validated clinical software, and official drug labeling.</p>
+  </div>
+
+  <div class="disclaimer-card">
+    <h2>2. Mathematical & Model Limitations</h2>
+    <p>The calculators on this platform utilize simplified single-compartment or basic pharmacokinetic mathematical models for conceptual clarity:</p>
+    <ul>
+      <li><strong>Gentamicin / Tobramycin:</strong> Interval predictions use derived single-dose kinetic boundaries designed to illustrate Hartford nomogram principles, rather than dynamic population-based Bayesian estimates.</li>
+      <li><strong>Vancomycin:</strong> Dynamic simulations simplify volume of distribution (V<sub>d</sub>) and elimination constants (K<sub>e</sub>) to demonstrate steady-state concept curves rather than multi-compartment physiological realities.</li>
+    </ul>
+    <p>Individual pharmacokinetic responses vary significantly based on patient-specific physiological factors, acute changes in renal function, fluid shifts, and co-administered medications.</p>
+  </div>
+
+  <div class="disclaimer-card">
+    <h2>3. Limitation of Liability</h2>
+    <p>Under no circumstances shall the creators, developers, or contributors of this website be liable for any direct, indirect, incidental, consequential, or special damages arising out of the use of, or inability to use, the information and tools provided here. By using this site, you acknowledge and agree that reliance on any information generated by these calculators is strictly at your own risk.</p>
+  </div>
+
+  <div class="footer-note">
+    Clinical Pharmacokinetics Learning Lab • Designed for educational exploration
+  </div>
+</div>
+
+</body>
+</html>

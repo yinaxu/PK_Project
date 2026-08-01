@@ -1,0 +1,85 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>References | Clinical Pharmacokinetics Learning Lab</title>
+  <link rel="preconnect" href="https://fonts.googleapis.com" />
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
+  <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700&family=Newsreader:wght@500;600;700&display=swap" rel="stylesheet" />
+  <link rel="stylesheet" href="styles.css" />
+  <style>
+    .intro { font-size: 1rem; color: var(--muted); margin: 0; max-width: 720px; }
+    .card ul { margin: 0; padding-left: 18px; color: var(--muted); }
+    .card li { margin-bottom: 12px; }
+    .card strong { color: var(--ink); }
+    .note { font-size: 0.92rem; color: var(--muted-light); margin-top: 6px; display: block; }
+  </style>
+</head>
+<body>
+  <nav class="nav">
+    <a href="index.html" class="brand">Clinical Pharmacokinetics Learning Lab</a>
+    <div class="links">
+      <a href="index.html">Home</a>
+      <a href="bayesian-dosing.html">Vancomycin</a>
+      <a href="aminoglycoside-dosing.html">Aminoglycoside</a>
+      <a href="about.html">About</a>
+      <a href="references.html" class="active">References</a>
+      <a href="disclaimer.html">Disclaimer</a>
+    </div>
+  </nav>
+
+  <main class="wrap wrap-narrow">
+    <div class="eyebrow">Clinical & Mathematical References</div>
+    <h1>References</h1>
+    <p class="intro">The algorithms, target parameters, and kinetic models used in this educational lab are derived from published consensus guidelines and established pharmacokinetic literature.</p>
+
+    <section class="card" style="margin-top:28px;">
+      <h2 class="card-title">1. Vancomycin Therapeutic Drug Monitoring & Bayesian Estimation</h2>
+      <ul>
+        <li>
+          <strong>Consensus Guidelines (AUC-Based Dosing):</strong><br />
+          Rybak MJ, Le J, Lodise TP, et al. Therapeutic monitoring of vancomycin for serious methicillin-resistant <em>Staphylococcus aureus</em> infections: A revised consensus guideline and review by the ASHP, IDSA, PIDS, and SIDP. <em>Am J Health-Syst Pharm</em>. 2020;77(11):835–864.
+          <span class="note">Key basis for: target AUC<sub>24</sub>/MIC ratio (400–600 mg·h/L) and endorsement of Bayesian MIPD software.</span>
+        </li>
+        <li>
+          <strong>Bayesian Forecasting in Clinical Practice:</strong><br />
+          Neely MN, Youn G, Kovacevic B, et al. Are traditional target vancomycin trough concentrations adequate for optimal therapeutic outcomes? <em>Antimicrob Agents Chemother</em>. 2014;58(1):309–316.
+          <span class="note">Key basis for: maximum a posteriori (MAP) parameter updates using population priors and individual serum levels.</span>
+        </li>
+      </ul>
+    </section>
+
+    <section class="card">
+      <h2 class="card-title">2. Extended-Interval Aminoglycoside Dosing</h2>
+      <ul>
+        <li>
+          <strong>Hartford Nomogram:</strong><br />
+          Nicolau DP, Freeman CD, Belliveau PP, et al. Experience with a once-daily aminoglycoside dosing regimen incorporating a true pharmacodynamic endpoint. <em>Antimicrob Agents Chemother</em>. 1995;39(3):650–655.
+          <span class="note">Key basis for: 7 mg/kg gentamicin/tobramycin dosing curves and interval-selection decision trees.</span>
+        </li>
+      </ul>
+    </section>
+
+    <section class="card">
+      <h2 class="card-title">3. Basic Pharmacokinetics & Renal Function Estimation</h2>
+      <ul>
+        <li>
+          <strong>Cockcroft-Gault Creatinine Clearance:</strong><br />
+          Cockcroft DW, Gault MH. Prediction of creatinine clearance from serum creatinine. <em>Nephron</em>. 1976;16(1):31–41.
+          <span class="note">Key basis for: baseline renal function estimation and elimination rate constant (K<sub>e</sub>) derivations.</span>
+        </li>
+        <li>
+          <strong>Clinical Pharmacokinetics Principles:</strong><br />
+          Bauer LA. <em>Applied Clinical Pharmacokinetics</em>. 3rd ed. McGraw-Hill Education; 2014.
+          <span class="note">Key basis for: first-order elimination equations, steady-state concentration estimates, and volume-of-distribution calculations.</span>
+        </li>
+      </ul>
+    </section>
+  </main>
+
+  <footer>
+    Built for education, not clinical use — see the <a href="disclaimer.html">disclaimer</a>.
+  </footer>
+</body>
+</html>
