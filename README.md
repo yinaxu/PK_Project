@@ -2,7 +2,7 @@
 
 Interactive educational tools for learning precision dosing and Bayesian pharmacokinetics.
 
-**[Live site →](#)** *(replace with your GitHub Pages link once deployed — see below)*
+**[Live site →](#)** *(https://yinaxu.github.io/PK_Project/)*
 
 ![status](https://img.shields.io/badge/status-portfolio%20project-0F766E)
 
