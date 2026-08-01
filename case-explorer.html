@@ -135,22 +135,22 @@
           </label>
         </div>
 
-        <div class="subhead l1">LEVEL 1 (DAY 2)</div>
+        <div class="subhead l1">CONCENTRATION 1 (DAY 2)</div>
         <div class="field-grid">
           <label class="field"><span class="field-label">Drawn at</span>
             <div class="input-row"><input type="number" id="t1" value="11" step="0.5" /><span class="unit">hr</span></div>
           </label>
-          <label class="field"><span class="field-label">Level</span>
+          <label class="field"><span class="field-label">Concentration</span>
             <div class="input-row"><input type="number" id="c1" value="14.2" step="0.1" /><span class="unit">mg/L</span></div>
           </label>
         </div>
 
-        <div class="subhead l2">LEVEL 2 (DAY 4)</div>
+        <div class="subhead l2">CONCENTRATION 2 (DAY 4)</div>
         <div class="field-grid" style="margin-bottom:0;">
           <label class="field"><span class="field-label">Drawn at</span>
             <div class="input-row"><input type="number" id="t2" value="11" step="0.5" /><span class="unit">hr</span></div>
           </label>
-          <label class="field"><span class="field-label">Level</span>
+          <label class="field"><span class="field-label">Concentration</span>
             <div class="input-row"><input type="number" id="c2" value="19.5" step="0.1" /><span class="unit">mg/L</span></div>
           </label>
         </div>
@@ -162,17 +162,17 @@
           <svg id="chart" width="100%" height="270" viewBox="0 0 640 270"></svg>
           <div class="legend">
             <div class="legend-item"><span class="swatch" style="border-top:2px dashed #B0B7C3;"></span>Population prior</div>
-            <div class="legend-item"><span class="swatch" style="background:#B45309;"></span>Posterior after level 1</div>
-            <div class="legend-item"><span class="swatch" style="background:#B91C1C;"></span>Posterior after level 2</div>
-            <div class="legend-item"><span class="swatch dot" style="background:#B45309;"></span>Level 1</div>
-            <div class="legend-item"><span class="swatch dot" style="background:#B91C1C;"></span>Level 2</div>
+            <div class="legend-item"><span class="swatch" style="background:#B45309;"></span>Posterior after concentration 1</div>
+            <div class="legend-item"><span class="swatch" style="background:#B91C1C;"></span>Posterior after concentration 2</div>
+            <div class="legend-item"><span class="swatch dot" style="background:#B45309;"></span>Concentration 1</div>
+            <div class="legend-item"><span class="swatch dot" style="background:#B91C1C;"></span>Concentration 2</div>
           </div>
         </div>
 
         <div class="stats-row">
           <div class="stat p0"><div class="label">Population AUC24</div><div class="value" id="auc0">–</div></div>
-          <div class="stat p1"><div class="label">After level 1</div><div class="value" id="auc1">–</div></div>
-          <div class="stat p2"><div class="label">After level 2</div><div class="value" id="auc2">–</div></div>
+          <div class="stat p1"><div class="label">After concentration 1</div><div class="value" id="auc1">–</div></div>
+          <div class="stat p2"><div class="label">After concentration 2</div><div class="value" id="auc2">–</div></div>
         </div>
       </div>
     </div>
@@ -309,7 +309,7 @@ function buildNarrative(p) {
 
   const finalZone = zoneOf(p.m2.auc24);
   let recAction;
-  if (finalZone === 'target') recAction = 'Continue the current regimen — the updated estimate lands inside the target range.';
+  if (finalZone === 'target') recAction = 'This finding is consistent with continuing the current regimen — the updated estimate lands inside the target range.';
   else if (finalZone === 'above') recAction = 'Consider extending the interval or reducing the dose — the updated estimate is above target, and with clearance trending down, a repeat level after any change is warranted.';
   else recAction = 'Consider increasing the dose or shortening the interval — the updated estimate is below target.';
   const step4 = `
