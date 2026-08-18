@@ -307,7 +307,7 @@ function calcAll() {
     }
   }
 
-  return { crcl, vd, clPop, prior, posterior, curvePop, curvePost, tWithin, levelConc };
+  return { crcl, vd, clPop, prior, posterior, curvePop, curvePost, tWithin, levelConc, dose, tau };
 }
 
 function render() {
@@ -341,19 +341,19 @@ function render() {
 
   drawChart(r);
   document.getElementById('reasoningBody').innerHTML = buildReasoning(r);
-  document.getElementById('nextDose').innerHTML = buildNextDose(r, dose, tau);
+  document.getElementById('nextDose').innerHTML = buildNextDose(r);
 }
 
-function buildNextDose(r, dose, tau) {
+function buildNextDose(r) {
   const usingPosterior = !!r.posterior;
   const basis = r.posterior || r.prior;
   const targetLow = 400, targetHigh = 600, targetMid = 500;
   const currentAuc = basis.auc24;
   const inTarget = currentAuc >= targetLow && currentAuc <= targetHigh;
 
-  let recDose = dose;
+  let recDose = r.dose;
   if (!inTarget) {
-    recDose = Math.round((dose * (targetMid / currentAuc)) / 250) * 250;
+    recDose = Math.round((r.dose * (targetMid / currentAuc)) / 250) * 250;
     if (recDose < 250) recDose = 250;
   }
 
@@ -362,11 +362,11 @@ function buildNextDose(r, dose, tau) {
 
   let headline, sub;
   if (inTarget) {
-    headline = `Continue ${dose} mg every ${tau} hr`;
+    headline = `Continue ${r.dose} mg every ${r.tau} hr`;
     sub = `Predicted AUC24 (${currentAuc.toFixed(0)} mg\u00B7h/L) is within the typical 400\u2013600 mg\u00B7h/L target range, based on ${basisLabel}.`;
   } else {
-    const direction = recDose > dose ? 'Increase to' : 'Decrease to';
-    headline = `${direction} ${recDose} mg every ${tau} hr`;
+    const direction = recDose > r.dose ? 'Increase to' : 'Decrease to';
+    headline = `${direction} ${recDose} mg every ${r.tau} hr`;
     sub = `Predicted AUC24 (${currentAuc.toFixed(0)} mg\u00B7h/L) is outside the typical 400\u2013600 mg\u00B7h/L target range, based on ${basisLabel}. This keeps the same interval and adjusts the dose to target ~${targetMid} mg\u00B7h/L.`;
   }
 
