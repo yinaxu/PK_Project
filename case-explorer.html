@@ -73,6 +73,21 @@
   .step-body li { font-size: 13.5px; line-height: 1.6; color: var(--ink); margin-bottom: 4px; }
 
   .disclaimer { font-size: 11.5px; color: var(--muted-light); line-height: 1.5; margin: 24px 4px 0; }
+
+  .next-dose {
+    background: var(--card); border: 1px solid var(--border); border-left: 4px solid var(--teal);
+    border-radius: 14px; padding: 20px 24px; margin-top: 18px;
+  }
+  .next-dose .tag {
+    font-size: 11px; font-weight: 700; letter-spacing: 0.1em; text-transform: uppercase;
+    color: var(--teal); margin-bottom: 10px;
+  }
+  .next-dose .headline { font-family: 'Newsreader', serif; font-size: 20px; font-weight: 600; color: var(--ink); margin: 0 0 6px; }
+  .next-dose .sub { font-size: 13px; color: var(--muted); line-height: 1.6; margin: 0 0 14px; }
+  .next-dose .nd-grid { display: grid; grid-template-columns: repeat(auto-fit, minmax(140px, 1fr)); gap: 14px; margin-bottom: 12px; }
+  .next-dose .nd-stat .k { font-size: 11px; text-transform: uppercase; letter-spacing: 0.04em; color: var(--muted); margin-bottom: 3px; }
+  .next-dose .nd-stat .v { font-family: 'IBM Plex Mono', monospace; font-size: 16px; color: var(--ink); }
+  .next-dose .nd-note { font-size: 12.5px; color: var(--muted); line-height: 1.6; border-top: 1px solid var(--border); padding-top: 12px; }
 </style>
 </head>
 <body>
@@ -179,6 +194,8 @@
 
     <div class="narrative" id="narrative"></div>
 
+    <div class="next-dose" id="nextDose"></div>
+
     <p class="disclaimer">Sequential single-parameter MAP updates on clearance (Vd fixed at 0.7 L/kg), log-normal prior (30% CV), 20% proportional residual error. The prior feeding the second update blends the day-2 posterior with the population estimate recalculated at the day-4 SCr, representing how a clinician would weigh both the individual's observed data and a documented renal function change. Simplified for illustration — not for clinical use. See <a href="disclaimer.html">disclaimer</a>.</p>
   </div>
 
@@ -269,6 +286,48 @@ function render() {
   document.getElementById('narrative').innerHTML = buildNarrative({
     crcl1, crcl2, clPop1, clPop2, clPost1, clPost2, m0, m1, m2, t1, c1, t2, c2, scr1, scr2,
   });
+  document.getElementById('nextDose').innerHTML = buildNextDose({ dose, tau, m2, crcl2 });
+}
+
+function buildNextDose(p) {
+  const targetLow = 400, targetHigh = 600, targetMid = 500;
+  const currentAuc = p.m2.auc24;
+  const inTarget = currentAuc >= targetLow && currentAuc <= targetHigh;
+
+  let recDose = p.dose;
+  if (!inTarget) {
+    recDose = Math.round((p.dose * (targetMid / currentAuc)) / 250) * 250;
+    if (recDose < 250) recDose = 250;
+  }
+
+  const halfLife = 0.693 / p.m2.ke;
+  const timeToSteady = (halfLife * 4.5).toFixed(0);
+
+  let headline, sub;
+  if (inTarget) {
+    headline = `Continue ${p.dose} mg every ${p.tau} hr`;
+    sub = `The day-4 posterior AUC24 (${currentAuc.toFixed(0)} mg\u00B7h/L) — the estimate that accounts for both concentrations and the renal function trend — falls within the 400\u2013600 mg\u00B7h/L target. The current regimen appears appropriate based on the most up-to-date data.`;
+  } else {
+    const direction = recDose > p.dose ? 'Increase to' : 'Decrease to';
+    const aboveOrBelow = currentAuc > targetHigh ? 'above' : 'below';
+    headline = `${direction} ${recDose} mg every ${p.tau} hr`;
+    sub = `The day-4 posterior AUC24 (${currentAuc.toFixed(0)} mg\u00B7h/L) is ${aboveOrBelow} the 400\u2013600 mg\u00B7h/L target. This adjustment keeps the same interval and retargets the dose to ~${targetMid} mg\u00B7h/L, accounting for both the observed concentration trend and the decline in renal function (CrCl now ${p.crcl2.toFixed(0)} mL/min).`;
+  }
+
+  return `
+    <div class="tag">Recommended next dose</div>
+    <p class="headline">${headline}</p>
+    <p class="sub">${sub}</p>
+    <div class="nd-grid">
+      <div class="nd-stat"><div class="k">Day-4 AUC24</div><div class="v">${currentAuc.toFixed(0)} mg\u00B7h/L</div></div>
+      <div class="nd-stat"><div class="k">Target range</div><div class="v">${targetLow}\u2013${targetHigh} mg\u00B7h/L</div></div>
+      <div class="nd-stat"><div class="k">Estimated half-life</div><div class="v">${halfLife.toFixed(1)} hr</div></div>
+      <div class="nd-stat"><div class="k">Time to new steady state</div><div class="v">~${timeToSteady} hr</div></div>
+    </div>
+    <p class="nd-note">${inTarget
+      ? `Continue routine monitoring — recheck a level if renal function keeps trending in either direction, since this estimate is only as current as the last SCr and level entered.`
+      : `Recheck a level once the patient reaches the new steady state (~${timeToSteady} hr from the revised regimen) to confirm this estimate holds — especially important here since renal function is still changing and hasn't necessarily plateaued.`}</p>
+  `;
 }
 
 function buildNarrative(p) {
